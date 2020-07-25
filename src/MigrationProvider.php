@@ -35,7 +35,7 @@ class MigrationProvider extends ServiceProvider
         }
 
         $this->publishes([
-            __DIR__.'/config/clickhouse.php' => config_path('clickhouse.php'),
+            __DIR__.'/../config/clickhouse.php' => config_path('clickhouse.php'),
         ], 'config');
     }
 }
