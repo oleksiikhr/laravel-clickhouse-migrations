@@ -1,0 +1,26 @@
+<?php
+
+use Alexeykhr\ClickhouseMigrations\ClickhouseMigration;
+
+class {{ class }} extends ClickhouseMigration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up(): void
+    {
+        //
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down(): void
+    {
+        //
+    }
+}

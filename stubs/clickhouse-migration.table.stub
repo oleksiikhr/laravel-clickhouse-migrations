@@ -1,0 +1,35 @@
+<?php
+
+use Alexeykhr\ClickhouseMigrations\ClickhouseMigration;
+
+class {{ class }} extends ClickhouseMigration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up(): void
+    {
+        $db = $this->getDatabaseName();
+
+        $this->client->write("
+            CREATE TABLE IF NOT EXISTS {$db}.{{ table }} (
+                //
+            )
+            ENGINE = MergeTree()
+        ");
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down(): void
+    {
+        $db = $this->getDatabaseName();
+
+        $this->client->write("DROP TABLE IF EXISTS {$db}.{{ table }}");
+    }
+}

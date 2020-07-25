@@ -1,0 +1,73 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "b96944cffbb20fa988466e722f0fc677",
+    "packages": [
+        {
+            "name": "smi2/phpclickhouse",
+            "version": "1.3.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/smi2/phpClickHouse.git",
+                "reference": "bbcc62f02689dd32946cbd10621c4afa0bec2eaf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/smi2/phpClickHouse/zipball/bbcc62f02689dd32946cbd10621c4afa0bec2eaf",
+                "reference": "bbcc62f02689dd32946cbd10621c4afa0bec2eaf",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": "^7.1"
+            },
+            "require-dev": {
+                "doctrine/coding-standard": "^5.0",
+                "phpstan/phpstan": "^0.10.3",
+                "phpunit/phpunit": "^7",
+                "sebastian/comparator": "~3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "ClickHouseDB\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Igor Strykhar",
+                    "email": "isublimity@gmail.com",
+                    "homepage": "https://github.com/isublimity"
+                }
+            ],
+            "description": "PHP ClickHouse Client",
+            "homepage": "https://github.com/smi2/phpClickHouse",
+            "keywords": [
+                "clickhouse",
+                "client",
+                "curl",
+                "driver",
+                "http",
+                "http client",
+                "php"
+            ],
+            "time": "2020-02-03T12:01:18+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
+}
