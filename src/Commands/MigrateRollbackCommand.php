@@ -5,17 +5,21 @@ namespace Alexeykhr\ClickhouseMigrations\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Console\ConfirmableTrait;
 use Alexeykhr\ClickhouseMigrations\Migrations\Migrator;
+use Alexeykhr\ClickhouseMigrations\Concerns\MigrationPath;
+use Alexeykhr\ClickhouseMigrations\Concerns\MigrationStep;
+use Alexeykhr\ClickhouseMigrations\Migrations\MigratorActionDown;
 
 class MigrateRollbackCommand extends Command
 {
-    use ConfirmableTrait;
+    use ConfirmableTrait, MigrationPath, MigrationStep;
 
     /**
      * @inheritDoc
      */
     protected $signature = 'clickhouse-migrate:rollback
                 {--force : Force the operation to run when in production}
-                {--path= : Path to Clickhouse directory with migrations}';
+                {--path= : Path to Clickhouse directory with migrations}
+                {--step=1 : Number of migrations to rollback}';
 
     /**
      * @inheritDoc
@@ -34,8 +38,10 @@ class MigrateRollbackCommand extends Command
             return 1;
         }
 
+        $action = new MigratorActionDown($this->getMigrationPath());
+
         $migrator->setOutput($this->getOutput());
-        $migrator->setDown();
+        $migrator->run($action, $this->getStep());
 
         return 0;
     }

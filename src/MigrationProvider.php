@@ -25,12 +25,11 @@ class MigrationProvider extends ServiceProvider
         $this->app->bind(Migrator::class, static function ($app, array $parameters = []) {
             $client = $parameters['client'] ?? app(Clickhouse::class)->getClient();
             $table = $parameters['table'] ?? config('clickhouse.migrations.table');
-            $path = $parameters['path'] ?? config('clickhouse.migrations.path');
             $filesystem = $parameters['filesystem'] ?? app(Filesystem::class);
 
             $model = new MigrationModel($table, $client);
 
-            return new Migrator($path, $model, $filesystem);
+            return new Migrator($model, $filesystem);
         });
     }
 

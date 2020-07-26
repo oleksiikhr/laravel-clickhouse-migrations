@@ -6,16 +6,20 @@ use Illuminate\Console\Command;
 use Illuminate\Console\ConfirmableTrait;
 use Alexeykhr\ClickhouseMigrations\Migrations\Migrator;
 use Alexeykhr\ClickhouseMigrations\Concerns\MigrationPath;
+use Alexeykhr\ClickhouseMigrations\Concerns\MigrationStep;
+use Alexeykhr\ClickhouseMigrations\Migrations\MigratorActionUp;
 
 class MigrateCommand extends Command
 {
-    use ConfirmableTrait;
+    use ConfirmableTrait, MigrationPath, MigrationStep;
 
     /**
      * @inheritDoc
      */
     protected $signature = 'clickhouse-migrate
-                {--force : Force the operation to run when in production}';
+                {--force : Force the operation to run when in production}
+                {--path= : Path to Clickhouse directory with migrations}
+                {--step= : Number of migrations to rollback}';
 
     /**
      * @inheritDoc
@@ -34,8 +38,10 @@ class MigrateCommand extends Command
             return 1;
         }
 
+        $action = new MigratorActionUp($this->getMigrationPath());
+
         $migrator->setOutput($this->getOutput());
-        $migrator->setUp();
+        $migrator->run($action, $this->getStep());
 
         return 0;
     }

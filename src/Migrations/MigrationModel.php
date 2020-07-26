@@ -24,6 +24,8 @@ class MigrationModel
     }
 
     /**
+     * Creating a new table to store migrations
+     *
      * @return Statement
      */
     public function create(): Statement
@@ -81,7 +83,9 @@ class MigrationModel
      */
     public function getLastBatchNumber(): int
     {
-        return $this->client->select("SELECT MAX(batch) AS batch FROM {$this->tableName}")->fetchOne()['batch'];
+        return $this->client
+            ->select("SELECT MAX(batch) AS batch FROM {$this->tableName}")
+            ->fetchOne()['batch'];
     }
 
     /**

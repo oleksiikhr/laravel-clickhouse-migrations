@@ -5,15 +5,11 @@ namespace Alexeykhr\ClickhouseMigrations\Migrations;
 use Illuminate\Support\Str;
 use Illuminate\Console\OutputStyle;
 use Illuminate\Filesystem\Filesystem;
+use Alexeykhr\ClickhouseMigrations\Contracts\MigratorActionContract;
 use Alexeykhr\ClickhouseMigrations\Contracts\ClickhouseMigrationContract;
 
 class Migrator
 {
-    /**
-     * @var string
-     */
-    protected $migrationPath;
-
     /**
      * @var MigrationModel
      */
@@ -29,52 +25,45 @@ class Migrator
      */
     protected $output;
 
-    public function __construct(string $migrationPath, MigrationModel $model, Filesystem $filesystem)
+    public function __construct(MigrationModel $model, Filesystem $filesystem)
     {
-        $this->migrationPath = $migrationPath;
-        $this->model = $model;
         $this->filesystem = $filesystem;
+        $this->model = $model;
     }
 
     /**
+     * @param  MigratorActionContract  $action
+     * @param  int  $step
      * @return void
      */
-    public function setUp(): void
+    public function run(MigratorActionContract $action, int $step): void
     {
         $this->ensureTableExists();
 
-        $paths = $this->getMigrationsForUp();
+        $action->setMigrator($this);
 
-        if (empty($paths)) {
+        $files = $action->getMigrations($step);
+
+        if (! $files->valid()) {
             $this->log("<info>Migrations are empty.</info>");
             return;
         }
 
-        $nextBatch = $this->model->getNextBatchNumber();
+        for ($i = $step; ($i > 0 || $step === 0) && $files->valid(); $i--) {
+            $this->filesystem->requireOnce($files->current());
 
-        foreach ($paths as $path) {
-            $this->runUpMigration($path, $nextBatch);
-        }
-    }
+            $startTime = microtime(true);
 
-    /**
-     * @return void
-     */
-    public function setDown(): void
-    {
-        $this->ensureTableExists();
+            $name = $this->getMigrationName($files->current());
+            $action->run($this->resolve($name));
 
-        $paths = $this->getMigrationsForDown();
+            $runTime = round(microtime(true) - $startTime, 2);
 
-        if (empty($paths)) {
-            $this->log("<info>Migrations are empty.</info>");
-            return;
-        }
+            $this->log("<info>Completed in {$runTime} seconds</info> {$files->current()}");
 
-//        $batch = $this->model->getLastBatchNumber();
+            $action->complete($name);
 
-        foreach ($paths as $path) {
-            $this->runDownMigration($path);
+            $files->next();
         }
     }
 
@@ -90,6 +79,33 @@ class Migrator
     }
 
     /**
+     * Get the name of the migration
+     *
+     * @param  string  $path
+     * @return string
+     */
+    public function getMigrationName(string $path): string
+    {
+        return str_replace('.php', '', basename($path));
+    }
+
+    /**
+     * @return MigrationModel
+     */
+    public function getModel(): MigrationModel
+    {
+        return $this->model;
+    }
+
+    /**
+     * @return Filesystem
+     */
+    public function getFilesystem(): Filesystem
+    {
+        return $this->filesystem;
+    }
+
+    /**
      * @return void
      */
     protected function ensureTableExists(): void
@@ -97,99 +113,6 @@ class Migrator
         if (! $this->model->exists()) {
             $this->model->create();
         }
-    }
-
-    /**
-     * @param  string  $path
-     * @return void
-     */
-    protected function runDownMigration(string $path): void
-    {
-        $migration = $this->resolve($path);
-
-        $startTime = microtime(true);
-
-        $migration->down();
-
-        $runTime = round(microtime(true) - $startTime, 2);
-
-        $this->model->delete($path);
-
-        dump($path.': '.$runTime); // TODO Console output
-    }
-
-    /**
-     * @param  string  $path
-     * @param  int  $batch
-     * @return void
-     */
-    protected function runUpMigration(string $path, int $batch): void
-    {
-        $migration = $this->resolve($path);
-
-        $startTime = microtime(true);
-
-        $migration->up();
-
-        $runTime = round(microtime(true) - $startTime, 2);
-
-        $this->model->add($path, $batch);
-
-        dump($path.': '.$runTime); // TODO Console output
-    }
-
-    /**
-     * @return string[]
-     */
-    protected function getMigrationsForUp(): array
-    {
-        $files = $this->filesystem->files($this->migrationPath);
-        $files = $this->pendingMigrations($files, $this->model->all());
-
-        $migrations = [];
-
-        foreach ($files as $file) {
-            $this->filesystem->requireOnce($file);
-
-            $migrations[] = $this->getMigrationName($file->getFilename());
-        }
-
-        return $migrations;
-    }
-
-    /**
-     * @return string[]
-     */
-    protected function getMigrationsForDown(): array
-    {
-        $migrations = $this->model->getLast();
-
-        foreach ($migrations as $migration) {
-            $file = $this->migrationPath.'/'.$migration.'.php';
-
-            if (! $this->filesystem->exists($file)) {
-                throw new \RuntimeException('File not exists '.$file);
-            }
-
-            $this->filesystem->requireOnce($file);
-        }
-
-        return $migrations;
-    }
-
-    /**
-     * @param  array  $files
-     * @param  array  $migrations
-     * @return array
-     */
-    protected function pendingMigrations(array $files, array $migrations): array
-    {
-        return collect($files)
-            ->reject(function ($file) use ($migrations) {
-                $name = $this->getMigrationName($file->getFilename());
-
-                return in_array($name, $migrations, true);
-            })->all();
     }
 
     /**
@@ -203,17 +126,6 @@ class Migrator
         }
 
         $this->output->writeln($message);
-    }
-
-    /**
-     * Get the name of the migration
-     *
-     * @param  string  $path
-     * @return string
-     */
-    protected function getMigrationName(string $path): string
-    {
-        return str_replace('.php', '', basename($path));
     }
 
     /**
