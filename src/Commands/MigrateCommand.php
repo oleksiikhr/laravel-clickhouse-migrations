@@ -7,7 +7,7 @@ use Illuminate\Console\ConfirmableTrait;
 use Alexeykhr\ClickhouseMigrations\Migrations\Migrator;
 use Alexeykhr\ClickhouseMigrations\Concerns\MigrationPath;
 use Alexeykhr\ClickhouseMigrations\Concerns\MigrationStep;
-use Alexeykhr\ClickhouseMigrations\Migrations\MigratorActionUp;
+use Alexeykhr\ClickhouseMigrations\Migrations\Actions\MigratorActionUp;
 
 class MigrateCommand extends Command
 {

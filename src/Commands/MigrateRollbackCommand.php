@@ -7,7 +7,7 @@ use Illuminate\Console\ConfirmableTrait;
 use Alexeykhr\ClickhouseMigrations\Migrations\Migrator;
 use Alexeykhr\ClickhouseMigrations\Concerns\MigrationPath;
 use Alexeykhr\ClickhouseMigrations\Concerns\MigrationStep;
-use Alexeykhr\ClickhouseMigrations\Migrations\MigratorActionDown;
+use Alexeykhr\ClickhouseMigrations\Migrations\Actions\MigratorActionDown;
 
 class MigrateRollbackCommand extends Command
 {

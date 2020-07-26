@@ -1,11 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Alexeykhr\ClickhouseMigrations\Migrations;
+namespace Alexeykhr\ClickhouseMigrations\Migrations\Actions;
 
 use Generator;
+use Symfony\Component\Finder\SplFileInfo;
+use Alexeykhr\ClickhouseMigrations\Migrations\Migrator;
 use Alexeykhr\ClickhouseMigrations\Contracts\MigratorActionContract;
 use Alexeykhr\ClickhouseMigrations\Contracts\ClickhouseMigrationContract;
-use Symfony\Component\Finder\SplFileInfo;
 
 class MigratorActionUp implements MigratorActionContract
 {

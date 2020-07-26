@@ -1,8 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Alexeykhr\ClickhouseMigrations\Migrations;
+namespace Alexeykhr\ClickhouseMigrations\Migrations\Actions;
 
 use Generator;
+use Alexeykhr\ClickhouseMigrations\Migrations\Migrator;
 use Alexeykhr\ClickhouseMigrations\Contracts\MigratorActionContract;
 use Alexeykhr\ClickhouseMigrations\Contracts\ClickhouseMigrationContract;
 
