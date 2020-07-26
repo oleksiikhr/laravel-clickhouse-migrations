@@ -2,8 +2,11 @@
 
 namespace Alexeykhr\ClickhouseMigrations;
 
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\ServiceProvider;
+use Alexeykhr\ClickhouseMigrations\Migrations\Migrator;
 use Alexeykhr\ClickhouseMigrations\Commands\MigrateCommand;
+use Alexeykhr\ClickhouseMigrations\Migrations\MigrationModel;
 use Alexeykhr\ClickhouseMigrations\Commands\MigrateMakeCommand;
 use Alexeykhr\ClickhouseMigrations\Commands\MigrateStubCommand;
 use Alexeykhr\ClickhouseMigrations\Commands\MigrateRollbackCommand;
@@ -19,7 +22,16 @@ class MigrationProvider extends ServiceProvider
             return new Clickhouse($config);
         });
 
-//        $this->app->when()->give();
+        $this->app->bind(Migrator::class, static function ($app, array $parameters = []) {
+            $client = $parameters['client'] ?? app(Clickhouse::class)->getClient();
+            $table = $parameters['table'] ?? config('clickhouse.migrations.table');
+            $path = $parameters['path'] ?? config('clickhouse.migrations.path');
+            $filesystem = $parameters['filesystem'] ?? app(Filesystem::class);
+
+            $model = new MigrationModel($table, $client);
+
+            return new Migrator($path, $model, $filesystem);
+        });
     }
 
     /**

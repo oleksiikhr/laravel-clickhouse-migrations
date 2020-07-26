@@ -3,6 +3,7 @@
 namespace Alexeykhr\ClickhouseMigrations\Migrations;
 
 use Illuminate\Support\Str;
+use Illuminate\Console\OutputStyle;
 use Illuminate\Filesystem\Filesystem;
 use Alexeykhr\ClickhouseMigrations\Contracts\ClickhouseMigrationContract;
 
@@ -23,6 +24,11 @@ class Migrator
      */
     protected $filesystem;
 
+    /**
+     * @var OutputStyle|null
+     */
+    protected $output;
+
     public function __construct(string $migrationPath, MigrationModel $model, Filesystem $filesystem)
     {
         $this->migrationPath = $migrationPath;
@@ -40,7 +46,7 @@ class Migrator
         $paths = $this->getMigrationsForUp();
 
         if (empty($paths)) {
-            // TODO Console output
+            $this->log("<info>Migrations are empty.</info>");
             return;
         }
 
@@ -61,7 +67,7 @@ class Migrator
         $paths = $this->getMigrationsForDown();
 
         if (empty($paths)) {
-            // TODO Console output
+            $this->log("<info>Migrations are empty.</info>");
             return;
         }
 
@@ -70,6 +76,17 @@ class Migrator
         foreach ($paths as $path) {
             $this->runDownMigration($path);
         }
+    }
+
+    /**
+     * @param  OutputStyle  $output
+     * @return $this
+     */
+    public function setOutput(OutputStyle $output): self
+    {
+        $this->output = $output;
+
+        return $this;
     }
 
     /**
@@ -173,6 +190,19 @@ class Migrator
 
                 return in_array($name, $migrations, true);
             })->all();
+    }
+
+    /**
+     * @param  string  $message
+     * @return void
+     */
+    protected function log(string $message): void
+    {
+        if (! $this->output) {
+            return;
+        }
+
+        $this->output->writeln($message);
     }
 
     /**

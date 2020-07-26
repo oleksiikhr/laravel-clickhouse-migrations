@@ -57,9 +57,9 @@ class MigrateStubCommand extends Command
     protected function generate(MigrationStubContract $stub): void
     {
         if ($path = $stub->publish()) {
-            $this->line("<info>Publishing complete</info> {$path}");
+            $this->line("<info>Publishing complete</info> {$path}.");
         } else {
-            $this->line('<error>Something went wrong</error>');
+            $this->line('<error>Something went wrong.</error>');
         }
     }
 }

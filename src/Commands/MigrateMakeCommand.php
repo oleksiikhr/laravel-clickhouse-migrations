@@ -65,8 +65,8 @@ class MigrateMakeCommand extends Command
         );
 
         $this->line($path
-            ? "<info>Migration created {$path}</info>"
-            : '<error>Migration file not created</error>');
+            ? "<info>Migration created</info> {$path}."
+            : '<error>Migration file not created.</error>');
 
         $this->composer->dumpAutoloads();
     }

@@ -3,12 +3,9 @@
 namespace Alexeykhr\ClickhouseMigrations\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Console\ConfirmableTrait;
-use Alexeykhr\ClickhouseMigrations\Clickhouse;
 use Alexeykhr\ClickhouseMigrations\Migrations\Migrator;
 use Alexeykhr\ClickhouseMigrations\Concerns\MigrationPath;
-use Alexeykhr\ClickhouseMigrations\Migrations\MigrationModel;
 
 class MigrateCommand extends Command
 {
@@ -28,22 +25,17 @@ class MigrateCommand extends Command
     /**
      * Execute the console command
      *
-     * @param  Clickhouse  $clickhouse
-     * @param  Filesystem  $filesystem
+     * @param  Migrator  $migrator
      * @return int
      */
-    public function handle(Clickhouse $clickhouse, Filesystem $filesystem): int
+    public function handle(Migrator $migrator): int
     {
         if (! $this->confirmToProceed()) {
             return 1;
         }
 
-        $model = new MigrationModel(config('clickhouse.migrations.table'), $clickhouse->getClient());
-
-        $migrator = new Migrator($this->getMigrationPath(), $model, $filesystem);
+        $migrator->setOutput($this->getOutput());
         $migrator->setUp();
-
-        $this->line('Complete');
 
         return 0;
     }

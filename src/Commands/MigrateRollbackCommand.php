@@ -29,19 +29,16 @@ class MigrateRollbackCommand extends Command
     /**
      * Execute the console command
      *
-     * @param  Clickhouse  $clickhouse
-     * @param  Filesystem  $filesystem
+     * @param  Migrator  $migrator
      * @return int
      */
-    public function handle(Clickhouse $clickhouse, Filesystem $filesystem): int
+    public function handle(Migrator $migrator): int
     {
         if (! $this->confirmToProceed()) {
             return 1;
         }
 
-        $model = new MigrationModel(config('clickhouse.migrations.table'), $clickhouse->getClient());
-
-        $migrator = new Migrator($this->getMigrationPath(), $model, $filesystem);
+        $migrator->setOutput($this->getOutput());
         $migrator->setDown();
 
         return 0;
