@@ -9,7 +9,7 @@ use Alexeykhr\ClickhouseMigrations\Concerns\MigrationPath;
 
 class MigrateCommand extends Command
 {
-    use ConfirmableTrait, MigrationPath;
+    use ConfirmableTrait;
 
     /**
      * @inheritDoc

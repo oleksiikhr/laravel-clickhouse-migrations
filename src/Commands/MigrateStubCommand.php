@@ -45,7 +45,9 @@ class MigrateStubCommand extends Command
             return [$type => StubFactory::create($type)];
         }
 
-        return collect(StubFactory::getExistsStubs())->map(static function ($stub) {
+        $stubs = StubFactory::getExistsStubs();
+
+        return collect($stubs)->map(static function ($stub) {
             return app($stub);
         })->all();
     }

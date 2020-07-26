@@ -3,16 +3,12 @@
 namespace Alexeykhr\ClickhouseMigrations\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Console\ConfirmableTrait;
-use Alexeykhr\ClickhouseMigrations\Clickhouse;
 use Alexeykhr\ClickhouseMigrations\Migrations\Migrator;
-use Alexeykhr\ClickhouseMigrations\Concerns\MigrationPath;
-use Alexeykhr\ClickhouseMigrations\Migrations\MigrationModel;
 
 class MigrateRollbackCommand extends Command
 {
-    use ConfirmableTrait, MigrationPath;
+    use ConfirmableTrait;
 
     /**
      * @inheritDoc
