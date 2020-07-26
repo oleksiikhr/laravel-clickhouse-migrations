@@ -4,7 +4,7 @@ namespace Alexeykhr\ClickhouseMigrations\Contracts;
 
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 
-interface ClickhouseStubContract
+interface MigrationStubContract
 {
     /**
      * @param  string  $className

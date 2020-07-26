@@ -4,7 +4,7 @@ namespace Alexeykhr\ClickhouseMigrations\Commands;
 
 use Illuminate\Console\Command;
 use Alexeykhr\ClickhouseMigrations\StubFactory;
-use Alexeykhr\ClickhouseMigrations\Contracts\ClickhouseStubContract;
+use Alexeykhr\ClickhouseMigrations\Contracts\MigrationStubContract;
 use Alexeykhr\ClickhouseMigrations\Exceptions\ClickhouseStubException;
 
 class MigrateStubCommand extends Command
@@ -36,7 +36,7 @@ class MigrateStubCommand extends Command
     }
 
     /**
-     * @return ClickhouseStubContract[]
+     * @return MigrationStubContract[]
      * @throws ClickhouseStubException
      */
     protected function getStubs(): array
@@ -47,17 +47,17 @@ class MigrateStubCommand extends Command
 
         return collect(StubFactory::getExistsStubs())->map(static function ($stub) {
             return app($stub);
-        })->toArray();
+        })->all();
     }
 
     /**
-     * @param  ClickhouseStubContract  $stub
+     * @param  MigrationStubContract  $stub
      * @return void
      */
-    protected function generate(ClickhouseStubContract $stub): void
+    protected function generate(MigrationStubContract $stub): void
     {
         if ($path = $stub->publish()) {
-            $this->line("<info>Publishing complete {$path}</info>");
+            $this->line("<info>Publishing complete</info> {$path}");
         } else {
             $this->line('<error>Something went wrong</error>');
         }

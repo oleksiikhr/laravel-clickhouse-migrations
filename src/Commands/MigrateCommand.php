@@ -7,11 +7,12 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Console\ConfirmableTrait;
 use Alexeykhr\ClickhouseMigrations\Clickhouse;
 use Alexeykhr\ClickhouseMigrations\Migrations\Migrator;
+use Alexeykhr\ClickhouseMigrations\Concerns\MigrationPath;
 use Alexeykhr\ClickhouseMigrations\Migrations\MigrationModel;
 
 class MigrateCommand extends Command
 {
-    use ConfirmableTrait;
+    use ConfirmableTrait, MigrationPath;
 
     /**
      * @inheritDoc
@@ -45,15 +46,5 @@ class MigrateCommand extends Command
         $this->line('Complete');
 
         return 0;
-    }
-
-    /**
-     * Get the path to the migration directory
-     *
-     * @return string
-     */
-    protected function getMigrationPath(): string
-    {
-        return $this->laravel->databasePath().'/clickhouse-migrations';
     }
 }

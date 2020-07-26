@@ -18,6 +18,8 @@ class MigrationProvider extends ServiceProvider
         $this->app->singleton(Clickhouse::class, static function ($app, array $config = []) {
             return new Clickhouse($config);
         });
+
+//        $this->app->when()->give();
     }
 
     /**

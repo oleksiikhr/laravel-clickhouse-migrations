@@ -5,9 +5,9 @@ namespace Alexeykhr\ClickhouseMigrations\Stubs;
 use Illuminate\Support\Str;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Alexeykhr\ClickhouseMigrations\Contracts\ClickhouseStubContract;
+use Alexeykhr\ClickhouseMigrations\Contracts\MigrationStubContract;
 
-abstract class BaseMigrationStub implements ClickhouseStubContract
+abstract class BaseMigrationStub implements MigrationStubContract
 {
     /**
      * @var Filesystem

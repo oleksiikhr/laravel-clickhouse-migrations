@@ -6,17 +6,21 @@ use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 use Illuminate\Support\Composer;
 use Alexeykhr\ClickhouseMigrations\StubFactory;
+use Alexeykhr\ClickhouseMigrations\Concerns\MigrationPath;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Alexeykhr\ClickhouseMigrations\Migrations\MigrationCreator;
 use Alexeykhr\ClickhouseMigrations\Exceptions\ClickhouseStubException;
 
 class MigrateMakeCommand extends Command
 {
+    use MigrationPath;
+
     /**
      * @inheritDoc
      */
     protected $signature = 'make:clickhouse-migration {name : The name of the migration}
-                {--table= : The table to migrate}';
+                {--table= : The table to migrate}
+                {--path= : Path to Clickhouse directory with migrations}';
 
     /**
      * @inheritDoc
@@ -50,31 +54,34 @@ class MigrateMakeCommand extends Command
      */
     public function handle(): void
     {
-        if ($table = $this->getTableOption()) {
-            $this->creator->setStub(StubFactory::create('table'));
-        }
+        // Depending on the received parameters, we use the appropriate stub
+        // to generate the migration
+        $this->applyStub();
 
         $path = $this->creator->create(
             $this->getNameArgument(),
             $this->getMigrationPath(),
-            $table
+            ['table' => $this->getTableOption()]
         );
 
         $this->line($path
             ? "<info>Migration created {$path}</info>"
-            : '<error>Something went wrong</error>');
+            : '<error>Migration file not created</error>');
 
         $this->composer->dumpAutoloads();
     }
 
     /**
-     * Get the path to the migration directory
+     * Use stub file to generate migration
      *
-     * @return string
+     * @return void
+     * @throws ClickhouseStubException
      */
-    protected function getMigrationPath(): string
+    protected function applyStub(): void
     {
-        return $this->laravel->databasePath().'/clickhouse-migrations';
+        if ($this->getTableOption()) {
+            $this->creator->setStub(StubFactory::create('table'));
+        }
     }
 
     /**

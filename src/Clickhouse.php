@@ -38,6 +38,8 @@ class Clickhouse
     }
 
     /**
+     * Creating a new instance of ClickHouse Client
+     *
      * @param  array  $config
      * @return Client
      */
@@ -73,6 +75,7 @@ class Clickhouse
      */
     protected function getConfig(): array
     {
+        /** @noinspection PhpMethodParametersCountMismatchInspection */
         return app('config')->get('clickhouse.config', []);
     }
 }

@@ -4,17 +4,17 @@ namespace Alexeykhr\ClickhouseMigrations;
 
 use Alexeykhr\ClickhouseMigrations\Stubs\TableMigrationStub;
 use Alexeykhr\ClickhouseMigrations\Stubs\DefaultMigrationStub;
-use Alexeykhr\ClickhouseMigrations\Contracts\ClickhouseStubContract;
+use Alexeykhr\ClickhouseMigrations\Contracts\MigrationStubContract;
 use Alexeykhr\ClickhouseMigrations\Exceptions\ClickhouseStubException;
 
 class StubFactory
 {
     /**
      * @param  string  $type
-     * @return ClickhouseStubContract
+     * @return MigrationStubContract
      * @throws ClickhouseStubException
      */
-    public static function create(string $type = 'default'): ClickhouseStubContract
+    public static function create(string $type = 'default'): MigrationStubContract
     {
         if ($stub = self::getExistsStubs()[$type] ?? null) {
             return app($stub);

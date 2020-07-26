@@ -15,5 +15,6 @@ return [
 
     'migrations' => [
         'table' => env('CLICKHOUSE_MIGRATION_TABLE_NAME', 'migrations'),
+        'path' => app()->databasePath().'/clickhouse-migrations',
     ],
 ];
