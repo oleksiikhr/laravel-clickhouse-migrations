@@ -5,12 +5,16 @@ namespace Alexeykhr\ClickhouseMigrations\Contracts;
 interface ClickhouseMigrationContract
 {
     /**
+     * Run the migrations.
+     *
      * @return void
      */
-    public function up(): void;
+    public function up();
 
     /**
+     * Reverse the migrations.
+     *
      * @return void
      */
-    public function down(): void;
+    public function down();
 }

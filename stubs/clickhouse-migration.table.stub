@@ -9,7 +9,7 @@ class {{ class }} extends ClickhouseMigration
      *
      * @return void
      */
-    public function up(): void
+    public function up()
     {
         $db = $this->getDatabaseName();
 
@@ -25,7 +25,7 @@ class {{ class }} extends ClickhouseMigration
      *
      * @return void
      */
-    public function down(): void
+    public function down()
     {
         $db = $this->getDatabaseName();
 

@@ -3,7 +3,6 @@
 namespace Alexeykhr\ClickhouseMigrations;
 
 use ClickHouseDB\Client;
-use Illuminate\Contracts\Container\BindingResolutionException;
 
 class Clickhouse
 {
@@ -60,7 +59,7 @@ class Clickhouse
             } elseif (method_exists($client, 'set'.ucwords($option))) {
                 $method = 'set'.ucwords($option);
             } else {
-                throw new \RuntimeException('Unknown ClickHouse DB option "'.$option.'"');
+                throw new \RuntimeException("Unknown ClickHouse DB option {$option}");
             }
 
             $client->$method($value);
@@ -71,10 +70,9 @@ class Clickhouse
 
     /**
      * @return array
-     * @throws BindingResolutionException
      */
     protected function getConfig(): array
     {
-        return app()->make('config')->get('clickhouse.config', []);
+        return app('config')->get('clickhouse.config', []);
     }
 }

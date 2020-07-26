@@ -10,11 +10,17 @@ abstract class ClickhouseMigration implements ClickhouseMigrationContract
     /**
      * @var Client
      */
-    public $client;
+    protected $client;
 
-    public function __construct(Clickhouse $client)
+    /**
+     * @var string
+     */
+    protected $database;
+
+    public function __construct(Clickhouse $client, ?string $database = null)
     {
         $this->client = $client->getClient();
+        $this->database = $database ?? config('clickhouse.config.options.database');
     }
 
     /**
@@ -22,6 +28,36 @@ abstract class ClickhouseMigration implements ClickhouseMigrationContract
      */
     public function getDatabaseName(): string
     {
-        return config('clickhouse.config.options.database');
+        return $this->database;
+    }
+
+    /**
+     * @param  string  $database
+     * @return $this
+     */
+    public function setDatabaseName(string $database): self
+    {
+        $this->database = $database;
+
+        return $this;
+    }
+
+    /**
+     * @return Client
+     */
+    public function getClient(): Client
+    {
+        return $this->client;
+    }
+
+    /**
+     * @param  Client  $client
+     * @return $this
+     */
+    public function setClient(Client $client): self
+    {
+        $this->client = $client;
+
+        return $this;
     }
 }
