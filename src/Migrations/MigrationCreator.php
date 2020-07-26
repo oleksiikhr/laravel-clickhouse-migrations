@@ -1,8 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Alexeykhr\ClickhouseMigrations;
+namespace Alexeykhr\ClickhouseMigrations\Migrations;
 
 use Illuminate\Filesystem\Filesystem;
+use Alexeykhr\ClickhouseMigrations\StubFactory;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Alexeykhr\ClickhouseMigrations\Contracts\ClickhouseStubContract;
 
@@ -30,10 +31,10 @@ class MigrationCreator
      * @param  string  $className
      * @param  string  $directory
      * @param  string|null  $table
-     * @return string path to file
+     * @return string|null path to file
      * @throws FileNotFoundException
      */
-    public function create(string $className, string $directory, ?string $table = null): string
+    public function create(string $className, string $directory, ?string $table = null): ?string
     {
         $this->filesystem->ensureDirectoryExists($directory);
 
@@ -43,9 +44,7 @@ class MigrationCreator
             'table' => $table,
         ]);
 
-        $this->filesystem->put($path, $content);
-
-        return $path;
+        return $this->filesystem->put($path, $content) === false ? null : $path;
     }
 
     /**

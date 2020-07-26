@@ -16,8 +16,7 @@ class {{ class }} extends ClickhouseMigration
         $this->client->write("
             CREATE TABLE IF NOT EXISTS {$db}.{{ table }} (
                 //
-            )
-            ENGINE = MergeTree()
+            ) ENGINE = MergeTree()
         ");
     }
 

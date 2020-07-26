@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Alexeykhr\ClickhouseMigrations\Commands\MigrateCommand;
 use Alexeykhr\ClickhouseMigrations\Commands\MigrateMakeCommand;
 use Alexeykhr\ClickhouseMigrations\Commands\MigrateStubCommand;
+use Alexeykhr\ClickhouseMigrations\Commands\MigrateRollbackCommand;
 
 class MigrationProvider extends ServiceProvider
 {
@@ -31,6 +32,7 @@ class MigrationProvider extends ServiceProvider
                 MigrateCommand::class,
                 MigrateMakeCommand::class,
                 MigrateStubCommand::class,
+                MigrateRollbackCommand::class,
             ]);
         }
 

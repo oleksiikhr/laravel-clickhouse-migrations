@@ -9,20 +9,20 @@ use Alexeykhr\ClickhouseMigrations\Clickhouse;
 use Alexeykhr\ClickhouseMigrations\Migrations\Migrator;
 use Alexeykhr\ClickhouseMigrations\Migrations\MigrationModel;
 
-class MigrateCommand extends Command
+class MigrateRollbackCommand extends Command
 {
     use ConfirmableTrait;
 
     /**
      * @inheritDoc
      */
-    protected $signature = 'clickhouse-migrate
+    protected $signature = 'clickhouse-migrate:rollback
                 {--force : Force the operation to run when in production}';
 
     /**
      * @inheritDoc
      */
-    protected $description = 'Run the ClickHouse database migrations';
+    protected $description = 'Downgrade the ClickHouse database migrations';
 
     /**
      * Execute the console command
@@ -40,9 +40,7 @@ class MigrateCommand extends Command
         $model = new MigrationModel(config('clickhouse.migrations.table'), $clickhouse->getClient());
 
         $migrator = new Migrator($this->getMigrationPath(), $model, $filesystem);
-        $migrator->setUp();
-
-        $this->line('Complete');
+        $migrator->setDown();
 
         return 0;
     }

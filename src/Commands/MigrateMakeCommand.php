@@ -6,8 +6,8 @@ use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 use Illuminate\Support\Composer;
 use Alexeykhr\ClickhouseMigrations\StubFactory;
-use Alexeykhr\ClickhouseMigrations\MigrationCreator;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Alexeykhr\ClickhouseMigrations\Migrations\MigrationCreator;
 use Alexeykhr\ClickhouseMigrations\Exceptions\ClickhouseStubException;
 
 class MigrateMakeCommand extends Command
@@ -54,11 +54,15 @@ class MigrateMakeCommand extends Command
             $this->creator->setStub(StubFactory::create('table'));
         }
 
-        $this->creator->create(
+        $path = $this->creator->create(
             $this->getNameArgument(),
             $this->getMigrationPath(),
             $table
         );
+
+        $this->line($path
+            ? "<info>Migration created {$path}</info>"
+            : '<error>Something went wrong</error>');
 
         $this->composer->dumpAutoloads();
     }
