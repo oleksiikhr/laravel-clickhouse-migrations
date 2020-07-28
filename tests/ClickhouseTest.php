@@ -2,7 +2,6 @@
 
 namespace Alexeykhr\ClickhouseMigrations\Tests;
 
-use Orchestra\Testbench\TestCase;
 use Alexeykhr\ClickhouseMigrations\Clickhouse;
 
 class ClickhouseTest extends TestCase

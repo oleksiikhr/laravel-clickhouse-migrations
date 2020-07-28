@@ -10,16 +10,16 @@ class MigrationModel
     /**
      * @var string
      */
-    protected $tableName;
+    protected $table;
 
     /**
      * @var Client
      */
     protected $client;
 
-    public function __construct(string $tableName, Client $client)
+    public function __construct(string $table, Client $client)
     {
-        $this->tableName = $tableName;
+        $this->table = $table;
         $this->client = $client;
     }
 
@@ -31,13 +31,15 @@ class MigrationModel
     public function create(): Statement
     {
         return $this->client->write("
-            CREATE TABLE IF NOT EXISTS {$this->tableName} (
+            CREATE TABLE IF NOT EXISTS {table} (
                 migration String,
                 batch UInt32
             )
             ENGINE = ReplacingMergeTree()
             ORDER BY migration
-        ");
+        ", [
+            'table' => $this->table,
+        ]);
     }
 
     /**
@@ -45,7 +47,9 @@ class MigrationModel
      */
     public function all(): array
     {
-        $rows = $this->client->select("SELECT migration FROM {$this->tableName}")->rows();
+        $rows = $this->client->select("SELECT migration FROM {table}", [
+            'table' => $this->table,
+        ])->rows();
 
         return collect($rows)->pluck('migration')->all();
     }
@@ -59,13 +63,15 @@ class MigrationModel
     {
         $rows = $this->client->select("
             SELECT migration
-            FROM {$this->tableName}
+            FROM {table}
             WHERE batch = (
                 SELECT MAX(batch)
-                FROM {$this->tableName}
+                FROM {table}
             )
             ORDER BY migration DESC
-        ")->rows();
+        ", [
+            'table' => $this->table,
+        ])->rows();
 
         return collect($rows)->pluck('migration')->all();
     }
@@ -84,7 +90,7 @@ class MigrationModel
     public function getLastBatchNumber(): int
     {
         return $this->client
-            ->select("SELECT MAX(batch) AS batch FROM {$this->tableName}")
+            ->select("SELECT MAX(batch) AS batch FROM {table}", ['table' => $this->table])
             ->fetchOne()['batch'];
     }
 
@@ -95,7 +101,7 @@ class MigrationModel
      */
     public function add(string $migration, int $batch): Statement
     {
-        return $this->client->insert($this->tableName, [[$migration, $batch]], ['migration', 'batch']);
+        return $this->client->insert($this->table, [[$migration, $batch]], ['migration', 'batch']);
     }
 
     /**
@@ -104,7 +110,8 @@ class MigrationModel
      */
     public function delete(string $migration): Statement
     {
-        return $this->client->write("ALTER TABLE {$this->tableName} DELETE WHERE migration=:migration", [
+        return $this->client->write("ALTER TABLE {table} DELETE WHERE migration=:migration", [
+            'table' => $this->table,
             'migration' => $migration,
         ]);
     }
@@ -114,6 +121,9 @@ class MigrationModel
      */
     public function exists(): bool
     {
-        return (int) $this->client->write("EXISTS TABLE {$this->tableName}")->rawData() === 1;
+        return (bool) $this->client->write("EXISTS TABLE {table}", [
+            'table' => $this->table,
+        ])
+            ->fetchOne()['result'];
     }
 }
