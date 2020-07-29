@@ -17,9 +17,9 @@ abstract class ClickhouseMigration implements ClickhouseMigrationContract
      */
     protected $database;
 
-    public function __construct(Clickhouse $client, ?string $database = null)
+    public function __construct(?Client $client = null, ?string $database = null)
     {
-        $this->client = $client->getClient();
+        $this->client = $client ?? app('clickhouse');
         $this->database = $database ?? config('clickhouse.config.options.database');
     }
 

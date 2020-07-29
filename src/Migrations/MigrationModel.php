@@ -121,7 +121,7 @@ class MigrationModel
      */
     public function exists(): bool
     {
-        return (bool) $this->client->write("EXISTS TABLE {table}", [
+        return (bool) $this->client->select("EXISTS TABLE {table}", [
             'table' => $this->table,
         ])
             ->fetchOne()['result'];

@@ -18,12 +18,14 @@ class MigrationProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton(Clickhouse::class, static function ($app, array $config = []) {
-            return new Clickhouse($config);
+        $this->app->singleton('clickhouse', static function ($app, array $config = []) {
+            $clickhouse = new Clickhouse($config);
+
+            return $clickhouse->getClient();
         });
 
         $this->app->bind(Migrator::class, static function ($app, array $parameters = []) {
-            $client = $parameters['client'] ?? app(Clickhouse::class)->getClient();
+            $client = $parameters['client'] ?? app('clickhouse');
             $table = $parameters['table'] ?? config('clickhouse.migrations.table');
             $filesystem = $parameters['filesystem'] ?? app(Filesystem::class);
 
