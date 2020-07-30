@@ -48,6 +48,25 @@ class MigrationCreator
     }
 
     /**
+     * @return MigrationStubContract
+     */
+    public function getStub(): MigrationStubContract
+    {
+        return $this->stub;
+    }
+
+    /**
+     * @param  MigrationStubContract  $stub
+     * @return $this
+     */
+    public function setStub(MigrationStubContract $stub): self
+    {
+        $this->stub = $stub;
+
+        return $this;
+    }
+
+    /**
      * Get the full path to the migration
      *
      * @param  string  $name
@@ -67,24 +86,5 @@ class MigrationCreator
     protected function getDatePrefix(): string
     {
         return date('Y_m_d_His');
-    }
-
-    /**
-     * @return MigrationStubContract
-     */
-    public function getStub(): MigrationStubContract
-    {
-        return $this->stub;
-    }
-
-    /**
-     * @param  MigrationStubContract  $stub
-     * @return $this
-     */
-    public function setStub(MigrationStubContract $stub): self
-    {
-        $this->stub = $stub;
-
-        return $this;
     }
 }

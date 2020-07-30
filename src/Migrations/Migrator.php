@@ -5,7 +5,7 @@ namespace Alexeykhr\ClickhouseMigrations\Migrations;
 use Illuminate\Support\Str;
 use Illuminate\Console\OutputStyle;
 use Illuminate\Filesystem\Filesystem;
-use Alexeykhr\ClickhouseMigrations\Contracts\MigratorActionContract;
+use Symfony\Component\Finder\SplFileInfo;
 use Alexeykhr\ClickhouseMigrations\Contracts\ClickhouseMigrationContract;
 
 class Migrator
@@ -21,6 +21,11 @@ class Migrator
     protected $filesystem;
 
     /**
+     * @var string
+     */
+    protected $migrationPath = 'database/clickhouse-migrations';
+
+    /**
      * @var OutputStyle|null
      */
     protected $output;
@@ -32,50 +37,95 @@ class Migrator
     }
 
     /**
-     * @param  MigratorActionContract  $action
      * @param  int  $step
      * @return void
      */
-    public function run(MigratorActionContract $action, int $step): void
+    public function runUp(int $step): void
     {
-        $this->ensureTableExists();
+        $migrations = $this->getMigrationsUp();
 
-        $action->setMigrator($this);
-
-        $files = $action->getMigrations($step);
-
-        if (! $files->valid()) {
+        if (! $migrations->valid()) {
             $this->log("<info>Migrations are empty.</info>");
             return;
         }
 
-        for ($i = $step; ($i > 0 || $step === 0) && $files->valid(); $i--) {
-            $this->filesystem->requireOnce($files->current());
+        $nextBatch = $this->model->getNextBatchNumber();
+
+        for ($i = $step; ($i > 0 || $step === 0) && $migrations->valid(); $i--) {
+            $this->filesystem->requireOnce($migrations->current());
 
             $startTime = microtime(true);
 
-            $name = $this->getMigrationName($files->current());
-            $action->run($this->resolve($name));
+            $migrationName = $this->getMigrationName($migrations->current());
+            $this->resolve($migrationName)->up();
 
             $runTime = round(microtime(true) - $startTime, 2);
 
-            $this->log("<info>Completed in {$runTime} seconds</info> {$files->current()}");
+            $this->log("<info>Completed in {$runTime} seconds</info> {$migrationName}");
 
-            $action->complete($name);
+            $this->model->add($migrationName, $nextBatch);
 
-            $files->next();
+            $migrations->next();
         }
     }
 
     /**
-     * @param  OutputStyle  $output
-     * @return $this
+     * @return \Generator
      */
-    public function setOutput(OutputStyle $output): self
+    public function getMigrationsUp(): \Generator
     {
-        $this->output = $output;
+        $files = $this->unAppliedMigrations();
 
-        return $this;
+        foreach ($files as $file) {
+            yield $this->migrationPath.'/'.$file->getFilename();
+        }
+    }
+
+    /**
+     * @param  int  $step
+     * @return void
+     */
+    public function runDown(int $step): void
+    {
+        $migrations = $this->getMigrationsDown();
+
+        if (! $migrations->valid()) {
+            $this->log("<info>Migrations are empty.</info>");
+            return;
+        }
+
+        for ($i = $step; ($i > 0 || $step === 0) && $migrations->valid(); $i--) {
+            if (! $this->filesystem->exists($migrations->current())) {
+                throw new \RuntimeException('File not exists '.$migrations->current());
+            }
+
+            $this->filesystem->requireOnce($migrations->current());
+
+            $startTime = microtime(true);
+
+            $migrationName = $this->getMigrationName($migrations->current());
+            $this->resolve($migrationName)->down();
+
+            $runTime = round(microtime(true) - $startTime, 2);
+
+            $this->log("<info>Completed in {$runTime} seconds</info> {$migrationName}");
+
+            $this->model->delete($migrationName);
+
+            $migrations->next();
+        }
+    }
+
+    /**
+     * @return \Generator
+     */
+    public function getMigrationsDown(): \Generator
+    {
+        $migrations = $this->model->getLast();
+
+        foreach ($migrations as $migration) {
+            yield $this->migrationPath.'/'.$migration.'.php';
+        }
     }
 
     /**
@@ -90,11 +140,45 @@ class Migrator
     }
 
     /**
+     * @return $this
+     */
+    public function ensureTableExists(): self
+    {
+        if (! $this->model->exists()) {
+            $this->model->create();
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param  OutputStyle  $output
+     * @return $this
+     */
+    public function setOutput(OutputStyle $output): self
+    {
+        $this->output = $output;
+
+        return $this;
+    }
+
+    /**
      * @return MigrationModel
      */
     public function getModel(): MigrationModel
     {
         return $this->model;
+    }
+
+    /**
+     * @param  MigrationModel  $model
+     * @return $this
+     */
+    public function setModel(MigrationModel $model): self
+    {
+        $this->model = $model;
+
+        return $this;
     }
 
     /**
@@ -106,13 +190,58 @@ class Migrator
     }
 
     /**
-     * @return void
+     * @param  Filesystem  $filesystem
+     * @return $this
      */
-    protected function ensureTableExists(): void
+    public function setFilesystem(Filesystem $filesystem): self
     {
-        if (! $this->model->exists()) {
-            $this->model->create();
-        }
+        $this->filesystem = $filesystem;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMigrationPath(): string
+    {
+        return $this->migrationPath;
+    }
+
+    /**
+     * @param  string  $migrationPath
+     * @return $this
+     */
+    public function setMigrationPath(string $migrationPath): self
+    {
+        $this->migrationPath = $migrationPath;
+
+        return $this;
+    }
+
+    /**
+     * @return SplFileInfo[]
+     */
+    protected function unAppliedMigrations(): array
+    {
+        $files = $this->filesystem->files($this->migrationPath);
+
+        return $this->pendingMigrations($files, $this->model->all());
+    }
+
+    /**
+     * @param  SplFileInfo[]  $files
+     * @param  array  $migrations
+     * @return SplFileInfo[]
+     */
+    protected function pendingMigrations(array $files, array $migrations): array
+    {
+        return collect($files)
+            ->reject(function ($file) use ($migrations) {
+                $name = $this->getMigrationName($file->getFilename());
+
+                return in_array($name, $migrations, true);
+            })->all();
     }
 
     /**

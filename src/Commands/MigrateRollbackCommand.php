@@ -7,11 +7,11 @@ use Illuminate\Console\ConfirmableTrait;
 use Alexeykhr\ClickhouseMigrations\Migrations\Migrator;
 use Alexeykhr\ClickhouseMigrations\Concerns\MigrationPath;
 use Alexeykhr\ClickhouseMigrations\Concerns\MigrationStep;
-use Alexeykhr\ClickhouseMigrations\Migrations\Actions\MigratorActionDown;
+use Alexeykhr\ClickhouseMigrations\Concerns\MigrationOutput;
 
 class MigrateRollbackCommand extends Command
 {
-    use ConfirmableTrait, MigrationPath, MigrationStep;
+    use ConfirmableTrait, MigrationPath, MigrationStep, MigrationOutput;
 
     /**
      * @inheritDoc
@@ -24,25 +24,51 @@ class MigrateRollbackCommand extends Command
     /**
      * @inheritDoc
      */
-    protected $description = 'Downgrade the ClickHouse database migrations';
+    protected $description = 'Rollback the ClickHouse database migrations';
+
+    /**
+     * @var Migrator
+     */
+    protected $migrator;
+
+    public function __construct(Migrator $migrator)
+    {
+        parent::__construct();
+
+        $this->migrator = $migrator;
+    }
 
     /**
      * Execute the console command
      *
-     * @param  Migrator  $migrator
-     * @return int
+     * @return void
      */
-    public function handle(Migrator $migrator): int
+    public function handle(): void
     {
-        if (! $this->confirmToProceed()) {
-            return 1;
+        if (! $this->prepare() || ! $this->confirmToProceed()) {
+            return;
         }
 
-        $action = new MigratorActionDown($this->getMigrationPath());
+        $this->migrator->runDown($this->getStep());
+    }
 
-        $migrator->setOutput($this->getOutput());
-        $migrator->run($action, $this->getStep());
+    /**
+     * @return bool
+     */
+    protected function prepare(): bool
+    {
+        $this->migrator->ensureTableExists()
+            ->setOutput($this->getOutput())
+            ->setMigrationPath($this->getMigrationPath());
 
-        return 0;
+        $migrations = $this->migrator->getMigrationsDown();
+
+        if (! $migrations->valid()) {
+            $this->output->writeln('<info>Migrations are empty!</info>');
+            return false;
+        }
+
+        $this->outputMigrations('Migrations Down', $migrations);
+        return true;
     }
 }
