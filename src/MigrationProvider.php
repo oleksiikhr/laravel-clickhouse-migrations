@@ -29,9 +29,9 @@ class MigrationProvider extends ServiceProvider
             $table = $parameters['table'] ?? config('clickhouse.migrations.table');
             $filesystem = $parameters['filesystem'] ?? app(Filesystem::class);
 
-            $model = new MigrationRepository($table, $client);
+            $repository = new MigrationRepository($table, $client);
 
-            return new Migrator($model, $filesystem);
+            return new Migrator($repository, $filesystem);
         });
     }
 

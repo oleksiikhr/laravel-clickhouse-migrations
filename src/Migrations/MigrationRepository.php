@@ -120,7 +120,6 @@ class MigrationRepository
     {
         return (bool) $this->client->select("EXISTS TABLE {table}", [
             'table' => $this->table,
-        ])
-            ->fetchOne('result');
+        ])->fetchOne('result');
     }
 }
