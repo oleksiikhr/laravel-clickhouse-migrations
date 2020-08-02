@@ -33,7 +33,8 @@ class MigrationRepository
         return $this->client->write("
             CREATE TABLE IF NOT EXISTS {table} (
                 migration String,
-                batch UInt32
+                batch UInt32,
+                applied_at DateTime DEFAULT NOW()
             )
             ENGINE = ReplacingMergeTree()
             ORDER BY migration
