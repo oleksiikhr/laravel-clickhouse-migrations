@@ -3,7 +3,7 @@
 namespace Alexeykhr\ClickhouseMigrations\Tests\Migrations;
 
 use Alexeykhr\ClickhouseMigrations\Tests\TestCase;
-use Alexeykhr\ClickhouseMigrations\Migrations\MigrationModel;
+use Alexeykhr\ClickhouseMigrations\Migrations\MigrationRepository;
 
 class MigrationModelTest extends TestCase
 {
@@ -12,7 +12,7 @@ class MigrationModelTest extends TestCase
      */
     public function testCreateTable(): void
     {
-        $model = new MigrationModel('migrationsTable2', $this->getClient());
+        $model = new MigrationRepository('migrationsTable2', $this->getClient());
 
         $checkTablePresent = function () {
             return (bool) $this->getClient()->select("EXISTS TABLE migrationsTable2")

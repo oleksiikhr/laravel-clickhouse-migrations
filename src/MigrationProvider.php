@@ -6,9 +6,9 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\ServiceProvider;
 use Alexeykhr\ClickhouseMigrations\Migrations\Migrator;
 use Alexeykhr\ClickhouseMigrations\Commands\MigrateCommand;
-use Alexeykhr\ClickhouseMigrations\Migrations\MigrationModel;
 use Alexeykhr\ClickhouseMigrations\Commands\MigrateMakeCommand;
 use Alexeykhr\ClickhouseMigrations\Commands\MigrateStubCommand;
+use Alexeykhr\ClickhouseMigrations\Migrations\MigrationRepository;
 use Alexeykhr\ClickhouseMigrations\Commands\MigrateRollbackCommand;
 
 class MigrationProvider extends ServiceProvider
@@ -29,7 +29,7 @@ class MigrationProvider extends ServiceProvider
             $table = $parameters['table'] ?? config('clickhouse.migrations.table');
             $filesystem = $parameters['filesystem'] ?? app(Filesystem::class);
 
-            $model = new MigrationModel($table, $client);
+            $model = new MigrationRepository($table, $client);
 
             return new Migrator($model, $filesystem);
         });

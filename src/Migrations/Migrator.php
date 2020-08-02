@@ -11,9 +11,9 @@ use Alexeykhr\ClickhouseMigrations\Contracts\ClickhouseMigrationContract;
 class Migrator
 {
     /**
-     * @var MigrationModel
+     * @var MigrationRepository
      */
-    protected $model;
+    protected $repository;
 
     /**
      * @var Filesystem
@@ -30,10 +30,10 @@ class Migrator
      */
     protected $output;
 
-    public function __construct(MigrationModel $model, Filesystem $filesystem)
+    public function __construct(MigrationRepository $model, Filesystem $filesystem)
     {
         $this->filesystem = $filesystem;
-        $this->model = $model;
+        $this->repository = $model;
     }
 
     /**
@@ -49,7 +49,7 @@ class Migrator
             return;
         }
 
-        $nextBatch = $this->model->getNextBatchNumber();
+        $nextBatch = $this->repository->getNextBatchNumber();
 
         for ($i = $step; ($i > 0 || $step === 0) && $migrations->valid(); $i--) {
             $this->filesystem->requireOnce($migrations->current());
@@ -63,7 +63,7 @@ class Migrator
 
             $this->log("<info>Completed in {$runTime} seconds</info> {$migrationName}");
 
-            $this->model->add($migrationName, $nextBatch);
+            $this->repository->add($migrationName, $nextBatch);
 
             $migrations->next();
         }
@@ -110,7 +110,7 @@ class Migrator
 
             $this->log("<info>Completed in {$runTime} seconds</info> {$migrationName}");
 
-            $this->model->delete($migrationName);
+            $this->repository->delete($migrationName);
 
             $migrations->next();
         }
@@ -121,7 +121,7 @@ class Migrator
      */
     public function getMigrationsDown(): \Generator
     {
-        $migrations = $this->model->getLast();
+        $migrations = $this->repository->getLast();
 
         foreach ($migrations as $migration) {
             yield $this->migrationPath.'/'.$migration.'.php';
@@ -144,8 +144,8 @@ class Migrator
      */
     public function ensureTableExists(): self
     {
-        if (! $this->model->exists()) {
-            $this->model->create();
+        if (! $this->repository->exists()) {
+            $this->repository->create();
         }
 
         return $this;
@@ -163,20 +163,20 @@ class Migrator
     }
 
     /**
-     * @return MigrationModel
+     * @return MigrationRepository
      */
-    public function getModel(): MigrationModel
+    public function getRepository(): MigrationRepository
     {
-        return $this->model;
+        return $this->repository;
     }
 
     /**
-     * @param  MigrationModel  $model
+     * @param  MigrationRepository  $repository
      * @return $this
      */
-    public function setModel(MigrationModel $model): self
+    public function setRepository(MigrationRepository $repository): self
     {
-        $this->model = $model;
+        $this->repository = $repository;
 
         return $this;
     }
@@ -226,7 +226,7 @@ class Migrator
     {
         $files = $this->filesystem->files($this->migrationPath);
 
-        return $this->pendingMigrations($files, $this->model->all());
+        return $this->pendingMigrations($files, $this->repository->all());
     }
 
     /**

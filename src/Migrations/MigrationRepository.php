@@ -5,7 +5,7 @@ namespace Alexeykhr\ClickhouseMigrations\Migrations;
 use ClickHouseDB\Client;
 use ClickHouseDB\Statement;
 
-class MigrationModel
+class MigrationRepository
 {
     /**
      * @var string
