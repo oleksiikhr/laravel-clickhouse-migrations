@@ -20,6 +20,7 @@ class MigrateRollbackCommand extends Command
                 {--force : Force the operation to run when in production}
                 {--output : Show migrations to apply before executing}
                 {--path= : Path to Clickhouse directory with migrations}
+                {--realpath : Indicate any provided migration file paths are pre-resolved absolute paths}
                 {--step=1 : Number of migrations to rollback}';
 
     /**

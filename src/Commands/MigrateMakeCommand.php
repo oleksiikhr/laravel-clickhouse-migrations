@@ -20,7 +20,8 @@ class MigrateMakeCommand extends Command
      */
     protected $signature = 'make:clickhouse-migration {name : The name of the migration}
                 {--table= : The table to migrate}
-                {--path= : Path to Clickhouse directory with migrations}';
+                {--path= : Path to Clickhouse directory with migrations}
+                {--realpath : Indicate any provided migration file paths are pre-resolved absolute paths}';
 
     /**
      * @inheritDoc
