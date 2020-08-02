@@ -18,6 +18,7 @@ class MigrateCommand extends Command
      */
     protected $signature = 'clickhouse-migrate
                 {--force : Force the operation to run when in production}
+                {--output : Show migrations to apply before executing}
                 {--path= : Path to Clickhouse directory with migrations}
                 {--step= : Number of migrations to rollback}';
 
@@ -45,30 +46,16 @@ class MigrateCommand extends Command
      */
     public function handle(): void
     {
-        if (! $this->prepare() || ! $this->confirmToProceed()) {
-            return;
-        }
-
-        $this->migrator->runUp($this->getStep());
-    }
-
-    /**
-     * @return bool
-     */
-    protected function prepare(): bool
-    {
         $this->migrator->ensureTableExists()
             ->setOutput($this->getOutput())
             ->setMigrationPath($this->getMigrationPath());
 
         $migrations = $this->migrator->getMigrationsUp();
 
-        if (! $migrations->valid()) {
-            $this->output->writeln('<info>Migrations are empty!</info>');
-            return false;
+        if (! $this->outputMigrations($migrations) || ! $this->confirmToProceed()) {
+            return;
         }
 
-        $this->outputMigrations('Migrations Up', $migrations);
-        return true;
+        $this->migrator->runUp($this->getStep());
     }
 }
