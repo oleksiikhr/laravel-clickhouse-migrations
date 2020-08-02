@@ -121,7 +121,7 @@ class Migrator
      */
     public function getMigrationsDown(): \Generator
     {
-        $migrations = $this->repository->getLast();
+        $migrations = $this->repository->latest();
 
         foreach ($migrations as $migration) {
             yield $this->migrationPath.'/'.$migration.'.php';

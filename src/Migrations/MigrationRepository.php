@@ -56,20 +56,16 @@ class MigrationRepository
     }
 
     /**
-     * Get the last migration batch
+     * Get latest accepted migrations
      *
      * @return array
      */
-    public function getLast(): array
+    public function latest(): array
     {
         $rows = $this->client->select("
             SELECT migration
             FROM {table}
-            WHERE batch = (
-                SELECT MAX(batch)
-                FROM {table}
-            )
-            ORDER BY migration DESC
+            ORDER BY batch DESC, migration DESC
         ", [
             'table' => $this->table,
         ])->rows();
@@ -92,7 +88,7 @@ class MigrationRepository
     {
         return $this->client
             ->select("SELECT MAX(batch) AS batch FROM {table}", ['table' => $this->table])
-            ->fetchOne()['batch'];
+            ->fetchOne('batch');
     }
 
     /**
@@ -125,6 +121,6 @@ class MigrationRepository
         return (bool) $this->client->select("EXISTS TABLE {table}", [
             'table' => $this->table,
         ])
-            ->fetchOne()['result'];
+            ->fetchOne('result');
     }
 }
