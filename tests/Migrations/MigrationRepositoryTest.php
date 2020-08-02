@@ -5,7 +5,7 @@ namespace Alexeykhr\ClickhouseMigrations\Tests\Migrations;
 use Alexeykhr\ClickhouseMigrations\Tests\TestCase;
 use Alexeykhr\ClickhouseMigrations\Migrations\MigrationRepository;
 
-class MigrationModelTest extends TestCase
+class MigrationRepositoryTest extends TestCase
 {
     /**
      * @return void
