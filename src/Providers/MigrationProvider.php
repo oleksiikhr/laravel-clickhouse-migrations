@@ -1,9 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Alexeykhr\ClickhouseMigrations;
+namespace Alexeykhr\ClickhouseMigrations\Providers;
 
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\ServiceProvider;
+use Alexeykhr\ClickhouseMigrations\Clickhouse;
 use Alexeykhr\ClickhouseMigrations\Migrations\Migrator;
 use Alexeykhr\ClickhouseMigrations\Commands\MigrateCommand;
 use Alexeykhr\ClickhouseMigrations\Commands\MigrateMakeCommand;
@@ -49,10 +50,10 @@ class MigrationProvider extends ServiceProvider
                 MigrateStubCommand::class,
                 MigrateRollbackCommand::class,
             ]);
-        }
 
-        $this->publishes([
-            __DIR__.'/../config/clickhouse.php' => config_path('clickhouse.php'),
-        ], 'config');
+            $this->publishes([
+                __DIR__.'/../../config/clickhouse.php' => config_path('clickhouse.php'),
+            ], 'config');
+        }
     }
 }

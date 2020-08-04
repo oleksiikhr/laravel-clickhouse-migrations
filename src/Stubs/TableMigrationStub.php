@@ -19,7 +19,7 @@ class TableMigrationStub extends BaseMigrationStub
      */
     public function getFilename(): string
     {
-        return 'clickhouse-migration.table.stub';
+        return 'table.stub';
     }
 
     /**

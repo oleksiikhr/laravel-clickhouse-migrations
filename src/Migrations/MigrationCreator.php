@@ -3,7 +3,7 @@
 namespace Alexeykhr\ClickhouseMigrations\Migrations;
 
 use Illuminate\Filesystem\Filesystem;
-use Alexeykhr\ClickhouseMigrations\StubFactory;
+use Alexeykhr\ClickhouseMigrations\Factories\FactoryStub;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Alexeykhr\ClickhouseMigrations\Contracts\MigrationStubContract;
 
@@ -24,7 +24,7 @@ class MigrationCreator
         $this->filesystem = $filesystem;
 
         /** @noinspection PhpUnhandledExceptionInspection */
-        $this->stub = $stub ?? StubFactory::create();
+        $this->stub = $stub ?? FactoryStub::create();
     }
 
     /**

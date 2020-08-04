@@ -14,9 +14,35 @@ abstract class BaseMigrationStub implements MigrationStubContract
      */
     protected $filesystem;
 
-    public function __construct(Filesystem $filesystem)
+    /**
+     * Path to Stubs
+     *
+     * @var string
+     */
+    protected $path;
+
+    public function __construct(Filesystem $filesystem, string $path)
     {
         $this->filesystem = $filesystem;
+        $this->path = $path;
+    }
+
+    /**
+     * @return string|null
+     * @throws FileNotFoundException
+     */
+    public function publish(): ?string
+    {
+        $this->filesystem->ensureDirectoryExists($this->path);
+
+        $result = $this->filesystem->put(
+            $this->path.'/'.$this->getFilename(),
+            $this->filesystem->get($this->getPackageStubPath().'/'.$this->getFilename())
+        );
+
+        return $result === false
+            ? null
+            : $this->path.'/'.$this->getFilename();
     }
 
     /**
@@ -45,31 +71,13 @@ abstract class BaseMigrationStub implements MigrationStubContract
      */
     public function getStubPath(): string
     {
-        $customPath = $this->getLaravelStubPath().'/'.$this->getFilename();
+        $customPath = $this->path.'/'.$this->getFilename();
 
         if ($this->filesystem->exists($customPath)) {
             return $customPath;
         }
 
         return $this->getPackageStubPath().'/'.$this->getFilename();
-    }
-
-    /**
-     * @return string|null
-     * @throws FileNotFoundException
-     */
-    public function publish(): ?string
-    {
-        $this->filesystem->ensureDirectoryExists($this->getLaravelStubPath());
-
-        $toPath = $this->getLaravelStubPath().'/'.$this->getFilename();
-
-        $result = $this->filesystem->put(
-            $toPath,
-            $this->filesystem->get($this->getPackageStubPath().'/'.$this->getFilename())
-        );
-
-        return $result === false ? null : $toPath;
     }
 
     /**
@@ -105,13 +113,5 @@ abstract class BaseMigrationStub implements MigrationStubContract
     protected function getPackageStubPath(): string
     {
         return __DIR__.'/../../stubs';
-    }
-
-    /**
-     * @return string
-     */
-    protected function getLaravelStubPath(): string
-    {
-        return base_path().'/stubs';
     }
 }

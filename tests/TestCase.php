@@ -3,6 +3,7 @@
 namespace Alexeykhr\ClickhouseMigrations\Tests;
 
 use ClickHouseDB\Client;
+use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase as BaseCase;
 use Alexeykhr\ClickhouseMigrations\Clickhouse;
 
@@ -48,5 +49,18 @@ class TestCase extends BaseCase
                 'connectTimeOut' => 2,
             ],
         ]))->getClient();
+    }
+
+    /**
+     * @param  Application  $app
+     * @return void
+     */
+    protected function getEnvironmentSetUp($app): void
+    {
+        parent::getEnvironmentSetUp($app);
+
+        $content = require __DIR__.'/../config/clickhouse.php';
+
+        $app->config->set(['clickhouse' => $content]);
     }
 }

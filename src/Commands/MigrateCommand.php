@@ -29,34 +29,23 @@ class MigrateCommand extends Command
     protected $description = 'Run the ClickHouse database migrations';
 
     /**
-     * @var Migrator
-     */
-    protected $migrator;
-
-    public function __construct(Migrator $migrator)
-    {
-        parent::__construct();
-
-        $this->migrator = $migrator;
-    }
-
-    /**
      * Execute the console command
      *
+     * @param  Migrator  $migrator
      * @return void
      */
-    public function handle(): void
+    public function handle(Migrator $migrator): void
     {
-        $this->migrator->ensureTableExists()
+        $migrator->ensureTableExists()
             ->setOutput($this->getOutput())
             ->setMigrationPath($this->getMigrationPath());
 
-        $migrations = $this->migrator->getMigrationsUp();
+        $migrations = $migrator->getMigrationsUp();
 
         if (! $this->outputMigrations($migrations) || ! $this->confirmToProceed()) {
             return;
         }
 
-        $this->migrator->runUp($this->getStep());
+        $migrator->runUp($this->getStep());
     }
 }

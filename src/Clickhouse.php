@@ -75,7 +75,6 @@ class Clickhouse
      */
     protected function getConfig(): array
     {
-        /** @noinspection PhpMethodParametersCountMismatchInspection */
-        return app('config')->get('clickhouse.config', []);
+        return config('clickhouse.config', []);
     }
 }

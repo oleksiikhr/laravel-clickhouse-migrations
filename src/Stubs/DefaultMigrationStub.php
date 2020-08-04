@@ -9,6 +9,6 @@ class DefaultMigrationStub extends BaseMigrationStub
      */
     public function getFilename(): string
     {
-        return 'clickhouse-migration.default.stub';
+        return 'default.stub';
     }
 }

@@ -5,7 +5,7 @@ namespace Alexeykhr\ClickhouseMigrations\Commands;
 use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 use Illuminate\Support\Composer;
-use Alexeykhr\ClickhouseMigrations\StubFactory;
+use Alexeykhr\ClickhouseMigrations\Factories\FactoryStub;
 use Alexeykhr\ClickhouseMigrations\Concerns\MigrationPath;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Alexeykhr\ClickhouseMigrations\Migrations\MigrationCreator;
@@ -19,6 +19,7 @@ class MigrateMakeCommand extends Command
      * @inheritDoc
      */
     protected $signature = 'make:clickhouse-migration {name : The name of the migration}
+                {--stub= : Use a specific stub}
                 {--table= : The table to migrate}
                 {--path= : Path to Clickhouse directory with migrations}
                 {--realpath : Indicate any provided migration file paths are pre-resolved absolute paths}';
@@ -29,37 +30,21 @@ class MigrateMakeCommand extends Command
     protected $description = 'Create a new ClickHouse migration file';
 
     /**
-     * @var MigrationCreator
-     */
-    protected $creator;
-
-    /**
-     * @var Composer
-     */
-    protected $composer;
-
-    public function __construct(MigrationCreator $creator, Composer $composer)
-    {
-        parent::__construct();
-
-        $this->creator = $creator;
-        $this->composer = $composer;
-    }
-
-    /**
      * Execute the console command
      *
+     * @param  MigrationCreator  $creator
+     * @param  Composer  $composer
      * @return void
-     * @throws FileNotFoundException
      * @throws ClickhouseStubException
+     * @throws FileNotFoundException
      */
-    public function handle(): void
+    public function handle(MigrationCreator $creator, Composer $composer): void
     {
         // Depending on the received parameters, we use the appropriate stub
         // to generate the migration
-        $this->applyStub();
+        $this->applyStub($creator);
 
-        $path = $this->creator->create(
+        $path = $creator->create(
             $this->getNameArgument(),
             $this->getMigrationPath(),
             ['table' => $this->getTableOption()]
@@ -69,19 +54,22 @@ class MigrateMakeCommand extends Command
             ? "<info>Migration created</info> {$path}."
             : '<error>Migration file not created.</error>');
 
-        $this->composer->dumpAutoloads();
+        $composer->dumpAutoloads();
     }
 
     /**
      * Use stub file to generate migration
      *
+     * @param  MigrationCreator  $creator
      * @return void
      * @throws ClickhouseStubException
      */
-    protected function applyStub(): void
+    protected function applyStub(MigrationCreator $creator): void
     {
-        if ($this->getTableOption()) {
-            $this->creator->setStub(StubFactory::create('table'));
+        if ($stub = $this->option('stub')) {
+            $creator->setStub(FactoryStub::create($stub));
+        } elseif ($this->getTableOption()) {
+            $creator->setStub(FactoryStub::create('table'));
         }
     }
 
@@ -90,7 +78,7 @@ class MigrateMakeCommand extends Command
      */
     protected function getNameArgument(): string
     {
-        return Str::snake(trim($this->input->getArgument('name')));
+        return Str::snake(trim($this->argument('name')));
     }
 
     /**
@@ -98,6 +86,10 @@ class MigrateMakeCommand extends Command
      */
     protected function getTableOption(): ?string
     {
-        return $this->option('table');
+        if ($table = $this->option('table')) {
+            return trim($table);
+        }
+
+        return null;
     }
 }

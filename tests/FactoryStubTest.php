@@ -2,11 +2,11 @@
 
 namespace Alexeykhr\ClickhouseMigrations\Tests;
 
-use Alexeykhr\ClickhouseMigrations\StubFactory;
+use Alexeykhr\ClickhouseMigrations\Factories\FactoryStub;
 use Alexeykhr\ClickhouseMigrations\Contracts\MigrationStubContract;
 use Alexeykhr\ClickhouseMigrations\Exceptions\ClickhouseStubException;
 
-class StubFactoryTest extends TestCase
+class FactoryStubTest extends TestCase
 {
     /**
      * @return void
@@ -14,9 +14,9 @@ class StubFactoryTest extends TestCase
      */
     public function testCreateExistsStub(): void
     {
-        $stubs = StubFactory::getExistsStubs();
+        $stubs = FactoryStub::getStubs();
 
-        $stub = StubFactory::create(key($stubs));
+        $stub = FactoryStub::create(key($stubs));
 
         $this->assertInstanceOf(MigrationStubContract::class, $stub);
     }
@@ -27,7 +27,7 @@ class StubFactoryTest extends TestCase
     public function testCreateNotExistsStub(): void
     {
         try {
-            StubFactory::create('not-exists-type');
+            FactoryStub::create('not-exists-type');
 
             $this->fail('Exception not thrown');
         } catch (\Exception $e) {

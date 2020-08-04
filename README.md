@@ -1,1 +1,1 @@
-php artisan vendor:publish --provider='Alexeykhr\ClickhouseMigrations\MigrationProvider'
+php artisan vendor:publish --provider='Alexeykhr\ClickhouseMigrations\Providers\MigrationProvider'
