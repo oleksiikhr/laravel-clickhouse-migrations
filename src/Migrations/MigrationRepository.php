@@ -114,6 +114,16 @@ class MigrationRepository
     }
 
     /**
+     * @return int
+     */
+    public function total(): int
+    {
+        return (int) $this->client->select("SELECT COUNT(*) AS count FROM {table}", [
+            'table' => $this->table,
+        ])->fetchOne('count');
+    }
+
+    /**
      * @return bool
      */
     public function exists(): bool

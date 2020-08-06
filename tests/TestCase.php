@@ -3,9 +3,10 @@
 namespace Alexeykhr\ClickhouseMigrations\Tests;
 
 use ClickHouseDB\Client;
-use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase as BaseCase;
 use Alexeykhr\ClickhouseMigrations\Clickhouse;
+use Alexeykhr\ClickhouseMigrations\Providers\MigrationProvider;
+use Alexeykhr\ClickhouseMigrations\Migrations\MigrationRepository;
 
 class TestCase extends BaseCase
 {
@@ -52,8 +53,24 @@ class TestCase extends BaseCase
     }
 
     /**
-     * @param  Application  $app
-     * @return void
+     * @return MigrationRepository
+     */
+    protected function repository(): MigrationRepository
+    {
+        return new MigrationRepository('migrations', $this->getClient());
+    }
+
+    /**
+     * @param  string  $path
+     * @return string
+     */
+    protected function assetsPath(string $path = ''): string
+    {
+        return __DIR__.DIRECTORY_SEPARATOR.'assets'.($path ? DIRECTORY_SEPARATOR.$path : $path);
+    }
+
+    /**
+     * @inheritDoc
      */
     protected function getEnvironmentSetUp($app): void
     {
@@ -62,5 +79,15 @@ class TestCase extends BaseCase
         $content = require __DIR__.'/../config/clickhouse.php';
 
         $app->config->set(['clickhouse' => $content]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getPackageProviders($app): array
+    {
+        return [
+            MigrationProvider::class,
+        ];
     }
 }
