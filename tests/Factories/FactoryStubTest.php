@@ -1,8 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Alexeykhr\ClickhouseMigrations\Tests;
+namespace Alexeykhr\ClickhouseMigrations\Tests\Factories;
 
+use Alexeykhr\ClickhouseMigrations\Tests\TestCase;
 use Alexeykhr\ClickhouseMigrations\Factories\FactoryStub;
+use Alexeykhr\ClickhouseMigrations\Stubs\DefaultMigrationStub;
 use Alexeykhr\ClickhouseMigrations\Contracts\MigrationStubContract;
 use Alexeykhr\ClickhouseMigrations\Exceptions\ClickhouseStubException;
 
@@ -17,6 +19,19 @@ class FactoryStubTest extends TestCase
         $stubs = FactoryStub::getStubs();
 
         $stub = FactoryStub::create(key($stubs));
+
+        $this->assertInstanceOf(MigrationStubContract::class, $stub);
+    }
+
+    /**
+     * @return void
+     * @throws ClickhouseStubException
+     */
+    public function testCreateExistsPackageStub(): void
+    {
+        config(['clickhouse.stubs' => ['myCustomStub' => DefaultMigrationStub::class]]);
+
+        $stub = FactoryStub::create('myCustomStub');
 
         $this->assertInstanceOf(MigrationStubContract::class, $stub);
     }
