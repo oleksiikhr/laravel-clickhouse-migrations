@@ -132,4 +132,16 @@ class MigrationRepository
             'table' => $this->table,
         ])->fetchOne('result');
     }
+
+    /**
+     * @param  string  $migration
+     * @return array|null
+     */
+    public function find(string $migration): ?array
+    {
+        return $this->client->select("SELECT * FROM {table} WHERE migration=:migration LIMIT 1", [
+            'table' => $this->table,
+            'migration' => $migration,
+        ])->fetchOne();
+    }
 }

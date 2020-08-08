@@ -147,4 +147,19 @@ class MigrationRepositoryTest extends TestCase
 
         $this->assertTrue($repository->exists());
     }
+
+    /**
+     * @return void
+     */
+    public function testFindMigration(): void
+    {
+        $repository = new MigrationRepository('t', $this->getClient());
+        $repository->create();
+
+        $this->getClient()->write("INSERT INTO t (migration, batch) VALUES ('m_2', 11), ('m_1', 6), ('m_3', 4)");
+
+        $migration = $repository->find('m_1');
+
+        $this->assertContains('m_1', $migration);
+    }
 }
