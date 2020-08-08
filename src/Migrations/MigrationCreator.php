@@ -3,9 +3,8 @@
 namespace Alexeykhr\ClickhouseMigrations\Migrations;
 
 use Illuminate\Filesystem\Filesystem;
-use Alexeykhr\ClickhouseMigrations\Factories\FactoryStub;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Alexeykhr\ClickhouseMigrations\Contracts\MigrationStubContract;
+use Alexeykhr\ClickhouseMigrations\Stubs\MigrationStub;
 
 class MigrationCreator
 {
@@ -15,51 +14,52 @@ class MigrationCreator
     protected $filesystem;
 
     /**
-     * @var MigrationStubContract
+     * @var MigrationStub
      */
     protected $stub;
 
-    public function __construct(Filesystem $filesystem, ?MigrationStubContract $stub = null)
+    public function __construct(Filesystem $filesystem, MigrationStub $stub)
     {
         $this->filesystem = $filesystem;
-
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $this->stub = $stub ?? FactoryStub::create();
+        $this->stub = $stub;
     }
 
     /**
      * Create a new migration from stub file
      *
-     * @param  string  $className
+     * @param  string  $stubFile
+     * @param  string  $fileName
      * @param  string  $directory
      * @param  array  $parameters
      * @return string|null path to file
      * @throws FileNotFoundException
      */
-    public function create(string $className, string $directory, array $parameters = []): ?string
+    public function create(string $stubFile, string $fileName, string $directory, array $parameters = []): ?string
     {
         $this->filesystem->ensureDirectoryExists($directory);
 
-        $path = $this->generatePath($className, $directory);
+        $path = $this->generatePath($fileName, $directory);
 
-        $content = $this->stub->generate($className, $parameters);
+        $content = $this->stub->generate($stubFile, $parameters);
 
-        return $this->filesystem->put($path, $content) === false ? null : $path;
+        return $this->filesystem->put($path, $content) === false
+            ? null
+            : $path;
     }
 
     /**
-     * @return MigrationStubContract
+     * @return MigrationStub
      */
-    public function getStub(): MigrationStubContract
+    public function getStub(): MigrationStub
     {
         return $this->stub;
     }
 
     /**
-     * @param  MigrationStubContract  $stub
+     * @param  MigrationStub  $stub
      * @return $this
      */
-    public function setStub(MigrationStubContract $stub): self
+    public function setStub(MigrationStub $stub): self
     {
         $this->stub = $stub;
 

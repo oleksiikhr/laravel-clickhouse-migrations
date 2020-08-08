@@ -8,7 +8,6 @@ use Alexeykhr\ClickhouseMigrations\Clickhouse;
 use Alexeykhr\ClickhouseMigrations\Migrations\Migrator;
 use Alexeykhr\ClickhouseMigrations\Commands\MigrateCommand;
 use Alexeykhr\ClickhouseMigrations\Commands\MigrateMakeCommand;
-use Alexeykhr\ClickhouseMigrations\Commands\MigrateStubCommand;
 use Alexeykhr\ClickhouseMigrations\Migrations\MigrationRepository;
 use Alexeykhr\ClickhouseMigrations\Commands\MigrateRollbackCommand;
 
@@ -47,7 +46,6 @@ class MigrationProvider extends ServiceProvider
             $this->commands([
                 MigrateCommand::class,
                 MigrateMakeCommand::class,
-                MigrateStubCommand::class,
                 MigrateRollbackCommand::class,
             ]);
 

@@ -34,9 +34,8 @@ return [
     */
 
     'migrations' => [
-        'table' => env('CLICKHOUSE_MIGRATION_TABLE_NAME', 'migrations'),
-        'path' => app()->databasePath('clickhouse-migrations'),
-        'stubPath' => app()->basePath('stubs/clickhouse'),
+        'table' => env('CLICKHOUSE_MIGRATION_TABLE', 'migrations'),
+        'path' => database_path('clickhouse-migrations'),
     ],
 
     /*
@@ -47,6 +46,10 @@ return [
     */
 
     'stubs' => [
-       // 'default' => 'App\Clickhouse\MyClickhouseStub',
+       // 'default' => base_path('stubs/file.stub),
+    ],
+
+    'handlers' => [
+       // 'App\Clickhouse\Handlers\MyHandler',
     ],
 ];

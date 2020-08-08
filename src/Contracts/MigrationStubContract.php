@@ -13,9 +13,4 @@ interface MigrationStubContract
      * @throws FileNotFoundException
      */
     public function generate(string $className, array $parameters = []): string;
-
-    /**
-     * @return string
-     */
-    public function getFilename(): string;
 }

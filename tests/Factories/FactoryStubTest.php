@@ -4,8 +4,6 @@ namespace Alexeykhr\ClickhouseMigrations\Tests\Factories;
 
 use Alexeykhr\ClickhouseMigrations\Tests\TestCase;
 use Alexeykhr\ClickhouseMigrations\Factories\FactoryStub;
-use Alexeykhr\ClickhouseMigrations\Stubs\DefaultMigrationStub;
-use Alexeykhr\ClickhouseMigrations\Contracts\MigrationStubContract;
 use Alexeykhr\ClickhouseMigrations\Exceptions\ClickhouseStubException;
 
 class FactoryStubTest extends TestCase
@@ -14,35 +12,38 @@ class FactoryStubTest extends TestCase
      * @return void
      * @throws ClickhouseStubException
      */
-    public function testCreateExistsStub(): void
+    public function testMakeExistsStub(): void
     {
         $stubs = FactoryStub::getStubs();
 
-        $stub = FactoryStub::create(key($stubs));
+        $stubFile = FactoryStub::make(key($stubs));
 
-        $this->assertInstanceOf(MigrationStubContract::class, $stub);
+        $this->assertStringContainsString($stubFile, $stubs[key($stubs)]);
     }
 
     /**
      * @return void
      * @throws ClickhouseStubException
      */
-    public function testCreateExistsPackageStub(): void
+    public function testOverridePackageStub(): void
     {
-        config(['clickhouse.stubs' => ['myCustomStub' => DefaultMigrationStub::class]]);
+        $stubs = FactoryStub::getStubs();
 
-        $stub = FactoryStub::create('myCustomStub');
+        [$existsStubKey, $existsStubValue] = [key($stubs), $stubs[key($stubs)]];
+        config(['clickhouse.stubs' => [$existsStubKey => $existsStubValue.'/new/path']]);
 
-        $this->assertInstanceOf(MigrationStubContract::class, $stub);
+        $stubFile = FactoryStub::make($existsStubKey);
+
+        $this->assertEquals($stubFile, $existsStubValue.'/new/path');
     }
 
     /**
      * @return void
      */
-    public function testCreateNotExistsStub(): void
+    public function testMakeNonExistsStub(): void
     {
         try {
-            FactoryStub::create('not-exists-type');
+            FactoryStub::make('non-exists-type');
 
             $this->fail('Exception not thrown');
         } catch (\Exception $e) {
