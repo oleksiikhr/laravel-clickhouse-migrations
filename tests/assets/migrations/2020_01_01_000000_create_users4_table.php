@@ -2,7 +2,7 @@
 
 use Alexeykhr\ClickhouseMigrations\ClickhouseMigration;
 
-class CreateUsersTable extends ClickhouseMigration
+class CreateUsers4Table extends ClickhouseMigration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class CreateUsersTable extends ClickhouseMigration
         $db = $this->getDatabaseName();
 
         $this->client->write("
-            CREATE TABLE IF NOT EXISTS {$db}.users (
+            CREATE TABLE IF NOT EXISTS {$db}.users4 (
                 id UInt64,
                 name String
             ) ENGINE = MergeTree()
@@ -31,6 +31,6 @@ class CreateUsersTable extends ClickhouseMigration
     {
         $db = $this->getDatabaseName();
 
-        $this->client->write("DROP TABLE IF EXISTS {$db}.users");
+        $this->client->write("DROP TABLE IF EXISTS {$db}.users4");
     }
 }

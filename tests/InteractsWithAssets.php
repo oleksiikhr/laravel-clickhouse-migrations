@@ -6,11 +6,16 @@ trait InteractsWithAssets
 {
     /**
      * @param  array  $fileNames
+     * @param  bool  $usePrefix
      * @return void
      */
-    public function useMigrations(array $fileNames): void
+    public function useMigrations(array $fileNames, bool $usePrefix = true): void
     {
         foreach ($fileNames as $fileName) {
+            if ($usePrefix) {
+                $fileName = '2020_01_01_000000_create_'.$fileName.'_table';
+            }
+
             copy(
                 $this->assetsPath('migrations/'.$fileName.'.php'),
                 $this->dynamicPath('migrations/'.$fileName.'.php')

@@ -2,6 +2,7 @@
 
 namespace Alexeykhr\ClickhouseMigrations\Tests\Commands;
 
+use ClickHouseDB\Exception\DatabaseException;
 use Alexeykhr\ClickhouseMigrations\Tests\TestCase;
 
 class MigrateCommandTest extends TestCase
@@ -21,12 +22,46 @@ class MigrateCommandTest extends TestCase
      */
     public function testSingleFile(): void
     {
-        $this->useMigrations(['2020_01_01_000000_create_users_table']);
+        $this->useMigrations(['users1']);
 
         $this->artisan('clickhouse-migrate');
 
         $this->assertClickhouseTotal(1);
-        $this->assertClickhouseContainsMigration('2020_01_01_000000_create_users_table');
+        $this->assertClickhouseContainsMigration('users1');
+    }
+
+    /**
+     * @return void
+     */
+    public function testTwoFiles(): void
+    {
+        $this->useMigrations(['users1', 'users2']);
+
+        $this->artisan('clickhouse-migrate');
+
+        $this->assertClickhouseTotal(2);
+        $this->assertClickhouseContainsMigration('users1');
+        $this->assertClickhouseContainsMigration('users2');
+    }
+
+    /**
+     * @return void
+     */
+    public function testThreeFilesWithException(): void
+    {
+        $this->useMigrations(['users1', 'users2', 'users3_exception', 'users4']);
+
+        try {
+            $this->artisan('clickhouse-migrate');
+
+            self::fail('DatabaseException not thrown');
+        } catch (\Exception $e) {
+            self::assertEquals(DatabaseException::class, get_class($e));
+        }
+
+        $this->assertClickhouseTotal(2);
+        $this->assertClickhouseContainsMigration('users1');
+        $this->assertClickhouseContainsMigration('users2');
     }
 
     /**
@@ -34,7 +69,7 @@ class MigrateCommandTest extends TestCase
      */
     public function testOutputWithNotApply(): void
     {
-        $this->useMigrations(['2020_01_01_000000_create_users_table']);
+        $this->useMigrations(['users1']);
 
         $this->artisan('clickhouse-migrate', [
             '--output' => true,
@@ -48,7 +83,7 @@ class MigrateCommandTest extends TestCase
      */
     public function testOutputWithApply(): void
     {
-        $this->useMigrations(['2020_01_01_000000_create_users_table']);
+        $this->useMigrations(['users1']);
 
         $this->artisan('clickhouse-migrate', [
             '--output' => true,
@@ -62,7 +97,7 @@ class MigrateCommandTest extends TestCase
      */
     public function testOutputWithForce(): void
     {
-        $this->useMigrations(['2020_01_01_000000_create_users_table']);
+        $this->useMigrations(['users1']);
 
         $this->artisan('clickhouse-migrate', [
             '--output' => true,
@@ -77,7 +112,7 @@ class MigrateCommandTest extends TestCase
      */
     public function testCustomRealPath(): void
     {
-        $this->useMigrations(['2020_01_01_000000_create_users_table']);
+        $this->useMigrations(['users1']);
 
         $this->artisan('clickhouse-migrate', [
             '--path' => $this->dynamicPath('migrations'),
@@ -92,14 +127,14 @@ class MigrateCommandTest extends TestCase
      */
     public function testZeroStep(): void
     {
-        $this->useMigrations(['2020_01_01_000000_create_users_table', '2020_01_01_000000_create_users2_table']);
+        $this->useMigrations(['users1', 'users2']);
 
         $this->artisan('clickhouse-migrate', [
             '--step' => 0,
         ]);
 
         $this->assertClickhouseTotal(2);
-        $this->assertClickhouseContainsMigration('2020_01_01_000000_create_users2_table');
+        $this->assertClickhouseContainsMigration('users2');
     }
 
     /**
@@ -107,7 +142,7 @@ class MigrateCommandTest extends TestCase
      */
     public function testSingleStep(): void
     {
-        $this->useMigrations(['2020_01_01_000000_create_users_table', '2020_01_01_000000_create_users2_table']);
+        $this->useMigrations(['users1', 'users2']);
 
         $this->artisan('clickhouse-migrate', [
             '--step' => 1,
@@ -121,7 +156,7 @@ class MigrateCommandTest extends TestCase
      */
     public function testTwoStep(): void
     {
-        $this->useMigrations(['2020_01_01_000000_create_users_table', '2020_01_01_000000_create_users2_table']);
+        $this->useMigrations(['users1', 'users2']);
 
         $this->artisan('clickhouse-migrate', [
             '--step' => 2,
@@ -135,7 +170,7 @@ class MigrateCommandTest extends TestCase
      */
     public function testTenStep(): void
     {
-        $this->useMigrations(['2020_01_01_000000_create_users_table', '2020_01_01_000000_create_users2_table']);
+        $this->useMigrations(['users1', 'users2']);
 
         $this->artisan('clickhouse-migrate', [
             '--step' => 10,
