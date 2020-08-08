@@ -33,7 +33,7 @@ trait InteractsWithAssets
      */
     public function dynamicPath(string $path = ''): string
     {
-        return $this->resolvePath('dynamic', $path);
+        return $this->resolvePath('assets/dynamic', $path);
     }
 
     /**
