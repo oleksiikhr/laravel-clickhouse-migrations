@@ -38,7 +38,7 @@ trait MigrationStubHandler
      */
     protected function getOptionHandlers(): array
     {
-        $classes = $this->option('stub.handler');
+        $classes = (array) $this->option('stub.handler');
 
         return $this->makeHandlers($classes);
     }

@@ -14,16 +14,11 @@ class MigrationRepositoryTest extends TestCase
     {
         $repository = new MigrationRepository('myTable1', $this->clickhouse());
 
-        $checkTablePresent = function () {
-            return (bool) $this->clickhouse()->select("EXISTS TABLE myTable1")
-                ->fetchOne('result');
-        };
-
-        self::assertFalse($checkTablePresent());
+        $this->assertClickhouseTableNotExists('myTable1');
 
         $repository->create();
 
-        self::assertTrue($checkTablePresent());
+        $this->assertClickhouseTableExists('myTable1');
     }
 
     /**

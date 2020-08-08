@@ -125,7 +125,7 @@ class MigrateMakeCommand extends Command
      */
     protected function getOptionStubParameters(): array
     {
-        $optionParameters = $this->option('stub.param');
+        $optionParameters = (array) $this->option('stub.param');
         $parameters = [];
 
         foreach ($optionParameters as $optionParameter) {

@@ -43,4 +43,33 @@ trait AssertsClickhouse
 
         self::assertFileExists($this->dynamicPath('migrations/'.$fileName.'.php'));
     }
+
+    /**
+     * @param  string  $table
+     * @return void
+     */
+    public function assertClickhouseTableExists(string $table): void
+    {
+        self::assertTrue($this->existsTable($table));
+    }
+
+    /**
+     * @param  string  $table
+     * @return void
+     */
+    public function assertClickhouseTableNotExists(string $table): void
+    {
+        self::assertFalse($this->existsTable($table));
+    }
+
+    /**
+     * @param  string  $table
+     * @return bool
+     */
+    private function existsTable(string $table): bool
+    {
+        return (bool) $this->clickhouse()->select("EXISTS TABLE {table}", [
+            'table' => $table,
+        ])->fetchOne('result');
+    }
 }
