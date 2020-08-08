@@ -182,25 +182,6 @@ class Migrator
     }
 
     /**
-     * @return Filesystem
-     */
-    public function getFilesystem(): Filesystem
-    {
-        return $this->filesystem;
-    }
-
-    /**
-     * @param  Filesystem  $filesystem
-     * @return $this
-     */
-    public function setFilesystem(Filesystem $filesystem): self
-    {
-        $this->filesystem = $filesystem;
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getMigrationPath(): string

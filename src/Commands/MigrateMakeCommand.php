@@ -2,7 +2,6 @@
 
 namespace Alexeykhr\ClickhouseMigrations\Commands;
 
-use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 use Illuminate\Support\Composer;
 use Alexeykhr\ClickhouseMigrations\Factories\FactoryStub;
@@ -81,7 +80,7 @@ class MigrateMakeCommand extends Command
      */
     protected function getNameArgument(): string
     {
-        return Str::snake(trim($this->argument('name')));
+        return trim($this->argument('name'));
     }
 
     /**
@@ -112,9 +111,7 @@ class MigrateMakeCommand extends Command
      */
     protected function getDefaultStubParameters(): array
     {
-        $parameters = [
-            'className' => $this->getNameArgument(),
-        ];
+        $parameters = [];
 
         if ($table = $this->getTableOption()) {
             $parameters['table'] = $table;

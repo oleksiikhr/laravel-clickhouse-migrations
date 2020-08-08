@@ -2,7 +2,6 @@
 
 namespace Alexeykhr\ClickhouseMigrations\Concerns;
 
-use Alexeykhr\ClickhouseMigrations\Stubs\Handlers\ClassStubHandler;
 use Alexeykhr\ClickhouseMigrations\Stubs\Handlers\TableStubHandler;
 use Alexeykhr\ClickhouseMigrations\Contracts\MigrationStubHandlerContract;
 
@@ -25,7 +24,7 @@ trait MigrationStubHandler
      */
     protected function getDefaultHandlers(): array
     {
-        $classes = [ClassStubHandler::class];
+        $classes = [];
 
         if ($this->hasOption('table') && $this->option('table')) {
             $classes[] = TableStubHandler::class;

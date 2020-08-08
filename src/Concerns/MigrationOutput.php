@@ -18,11 +18,6 @@ trait MigrationOutput
      */
     public function outputMigrations(Generator $migrations): bool
     {
-        if (! $migrations->valid()) {
-            $this->comment('<info>Migrations are empty!</info>');
-            return false;
-        }
-
         if (! $this->option('output')) {
             return true;
         }

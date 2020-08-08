@@ -2,8 +2,8 @@
 
 namespace Alexeykhr\ClickhouseMigrations\Stubs;
 
+use Illuminate\Support\Str;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Alexeykhr\ClickhouseMigrations\Contracts\MigrationStubContract;
 use Alexeykhr\ClickhouseMigrations\Contracts\MigrationStubHandlerContract;
 
@@ -26,14 +26,14 @@ class MigrationStub implements MigrationStubContract
     }
 
     /**
-     * @param  string  $filePath
-     * @param  array  $parameters
-     * @return string
-     * @throws FileNotFoundException
+     * @inheritDoc
      */
-    public function generate(string $filePath, array $parameters = []): string
+    public function generate(string $fileName, string $stubPath, array $parameters = []): string
     {
-        $content = $this->filesystem->get($filePath);
+        $content = $this->filesystem->get($stubPath);
+
+        // It is necessary to have the correct class to be able to do rollback
+        $content = $this->populateClass($content, $fileName);
 
         foreach ($this->handlers as $handler) {
             $content = $handler->populate($content, $parameters);
@@ -59,5 +59,30 @@ class MigrationStub implements MigrationStubContract
         $this->handlers = $handlers;
 
         return $this;
+    }
+
+    /**
+     * @param  string  $content
+     * @param  string  $fileName
+     * @return string
+     */
+    public function populateClass(string $content, string $fileName): string
+    {
+        return str_replace(
+            ['DummyClass', '{{ class }}', '{{class}}'],
+            $this->getClassName($fileName),
+            $content
+        );
+    }
+
+    /**
+     * Get the class name of a migration name
+     *
+     * @param  string  $name
+     * @return string
+     */
+    protected function getClassName($name): string
+    {
+        return Str::studly($name);
     }
 }

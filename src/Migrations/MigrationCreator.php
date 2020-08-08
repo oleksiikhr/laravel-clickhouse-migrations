@@ -5,6 +5,7 @@ namespace Alexeykhr\ClickhouseMigrations\Migrations;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Alexeykhr\ClickhouseMigrations\Stubs\MigrationStub;
+use Illuminate\Support\Str;
 
 class MigrationCreator
 {
@@ -27,20 +28,20 @@ class MigrationCreator
     /**
      * Create a new migration from stub file
      *
-     * @param  string  $stubFile
+     * @param  string  $stubPath
      * @param  string  $fileName
-     * @param  string  $directory
+     * @param  string  $migrationPath
      * @param  array  $parameters
      * @return string|null path to file
      * @throws FileNotFoundException
      */
-    public function create(string $stubFile, string $fileName, string $directory, array $parameters = []): ?string
+    public function create(string $stubPath, string $fileName, string $migrationPath, array $parameters = []): ?string
     {
-        $this->filesystem->ensureDirectoryExists($directory);
+        $this->filesystem->ensureDirectoryExists($migrationPath);
 
-        $path = $this->generatePath($fileName, $directory);
+        $path = $this->generatePath(Str::snake($fileName), $migrationPath);
 
-        $content = $this->stub->generate($stubFile, $parameters);
+        $content = $this->stub->generate($fileName, $stubPath, $parameters);
 
         return $this->filesystem->put($path, $content) === false
             ? null
@@ -75,7 +76,7 @@ class MigrationCreator
      */
     protected function generatePath(string $name, string $directory): string
     {
-        return $directory.'/'.$this->getDatePrefix().'_'.$name.'.php';
+        return $directory.'/'.$this->getDatePrefix().'_'.Str::snake($name).'.php';
     }
 
     /**
