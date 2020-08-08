@@ -21,6 +21,7 @@ trait AssertsClickhouse
     {
         $result = $this->repository()->find($migration);
 
+        self::assertNotNull($result);
         self::assertContains($migration, $result);
     }
 }

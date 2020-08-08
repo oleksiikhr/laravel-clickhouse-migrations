@@ -28,4 +28,61 @@ class MigrateCommandTest extends TestCase
         $this->assertClickhouseTotal(1);
         $this->assertClickhouseContainsMigration('2020_01_01_000000_create_users_table');
     }
+
+    /**
+     * @return void
+     */
+    public function testMigrateZeroStep(): void
+    {
+        $this->useMigrations(['2020_01_01_000000_create_users_table', '2020_01_01_000000_create_users2_table']);
+
+        $this->artisan('clickhouse-migrate', [
+            '--step' => 0,
+        ]);
+
+        $this->assertClickhouseTotal(2);
+        $this->assertClickhouseContainsMigration('2020_01_01_000000_create_users2_table');
+    }
+
+    /**
+     * @return void
+     */
+    public function testMigrateSingleStep(): void
+    {
+        $this->useMigrations(['2020_01_01_000000_create_users_table', '2020_01_01_000000_create_users2_table']);
+
+        $this->artisan('clickhouse-migrate', [
+            '--step' => 1,
+        ]);
+
+        $this->assertClickhouseTotal(1);
+    }
+
+    /**
+     * @return void
+     */
+    public function testMigrateTwoStep(): void
+    {
+        $this->useMigrations(['2020_01_01_000000_create_users_table', '2020_01_01_000000_create_users2_table']);
+
+        $this->artisan('clickhouse-migrate', [
+            '--step' => 2,
+        ]);
+
+        $this->assertClickhouseTotal(2);
+    }
+
+    /**
+     * @return void
+     */
+    public function testMigrateTenStep(): void
+    {
+        $this->useMigrations(['2020_01_01_000000_create_users_table', '2020_01_01_000000_create_users2_table']);
+
+        $this->artisan('clickhouse-migrate', [
+            '--step' => 10,
+        ]);
+
+        $this->assertClickhouseTotal(2);
+    }
 }

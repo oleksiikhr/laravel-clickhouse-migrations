@@ -45,7 +45,7 @@ class FactoryStubTest extends TestCase
         try {
             FactoryStub::make('non-exists-type');
 
-            self::fail('Exception not thrown');
+            self::fail('ClickhouseStubException not thrown');
         } catch (\Exception $e) {
             self::assertEquals(ClickhouseStubException::class, get_class($e));
         }
