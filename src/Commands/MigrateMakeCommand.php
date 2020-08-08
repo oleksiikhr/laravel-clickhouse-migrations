@@ -4,6 +4,8 @@ namespace Alexeykhr\ClickhouseMigrations\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Composer;
+use Illuminate\Filesystem\Filesystem;
+use Alexeykhr\ClickhouseMigrations\Stubs\MigrationStub;
 use Alexeykhr\ClickhouseMigrations\Factories\FactoryStub;
 use Alexeykhr\ClickhouseMigrations\Concerns\MigrationPath;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
@@ -34,14 +36,15 @@ class MigrateMakeCommand extends Command
     /**
      * Execute the console command
      *
-     * @param  MigrationCreator  $creator
+     * @param  Filesystem  $filesystem
      * @param  Composer  $composer
      * @return void
      * @throws ClickhouseStubException
      * @throws FileNotFoundException
      */
-    public function handle(MigrationCreator $creator, Composer $composer): void
+    public function handle(Filesystem $filesystem, Composer $composer): void
     {
+        $creator = new MigrationCreator($filesystem, app(MigrationStub::class));
         $creator->getStub()->setHandlers($this->getStubHandlers());
 
         $path = $creator->create(

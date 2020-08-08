@@ -66,7 +66,7 @@ class MigrationStub implements MigrationStubContract
      * @param  string  $fileName
      * @return string
      */
-    public function populateClass(string $content, string $fileName): string
+    protected function populateClass(string $content, string $fileName): string
     {
         return str_replace(
             ['DummyClass', '{{ class }}', '{{class}}'],

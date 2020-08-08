@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Alexeykhr\ClickhouseMigrations\Tests\assets\Handlers;
+namespace Alexeykhr\ClickhouseMigrations\Tests\assets;
 
 use Alexeykhr\ClickhouseMigrations\Contracts\MigrationStubHandlerContract;
 

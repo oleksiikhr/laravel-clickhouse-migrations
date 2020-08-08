@@ -2,10 +2,10 @@
 
 namespace Alexeykhr\ClickhouseMigrations\Migrations;
 
+use Illuminate\Support\Str;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Alexeykhr\ClickhouseMigrations\Stubs\MigrationStub;
-use Illuminate\Support\Str;
+use Alexeykhr\ClickhouseMigrations\Contracts\MigrationStubContract;
 
 class MigrationCreator
 {
@@ -15,11 +15,11 @@ class MigrationCreator
     protected $filesystem;
 
     /**
-     * @var MigrationStub
+     * @var MigrationStubContract
      */
     protected $stub;
 
-    public function __construct(Filesystem $filesystem, MigrationStub $stub)
+    public function __construct(Filesystem $filesystem, MigrationStubContract $stub)
     {
         $this->filesystem = $filesystem;
         $this->stub = $stub;
@@ -49,18 +49,18 @@ class MigrationCreator
     }
 
     /**
-     * @return MigrationStub
+     * @return MigrationStubContract
      */
-    public function getStub(): MigrationStub
+    public function getStub(): MigrationStubContract
     {
         return $this->stub;
     }
 
     /**
-     * @param  MigrationStub  $stub
+     * @param  MigrationStubContract  $stub
      * @return $this
      */
-    public function setStub(MigrationStub $stub): self
+    public function setStub(MigrationStubContract $stub): self
     {
         $this->stub = $stub;
 

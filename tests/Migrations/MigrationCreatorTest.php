@@ -6,8 +6,8 @@ use Illuminate\Filesystem\Filesystem;
 use Alexeykhr\ClickhouseMigrations\Tests\TestCase;
 use Alexeykhr\ClickhouseMigrations\Stubs\MigrationStub;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Alexeykhr\ClickhouseMigrations\Migrations\MigrationCreator;
-use Alexeykhr\ClickhouseMigrations\Tests\assets\Handlers\MyCustomStubHandler;
+use Alexeykhr\ClickhouseMigrations\Tests\assets\MyCustomStubHandler;
+use Alexeykhr\ClickhouseMigrations\Tests\assets\MigrationCreatorExtended;
 
 class MigrationCreatorTest extends TestCase
 {
@@ -19,16 +19,17 @@ class MigrationCreatorTest extends TestCase
     {
         $filesystem = new Filesystem();
         $stub = new MigrationStub($filesystem);
-        $creator = new MigrationCreator($filesystem, $stub);
+        $creator = new MigrationCreatorExtended($filesystem, $stub);
 
         $creator->create(
             $this->assetsPath('stubs/complete.stub'),
-            'MyMigrationPath',
+            'CreateMyMigrationTable',
             $this->dynamicPath('migrations')
         );
 
         $this->artisan('clickhouse-migrate');
         $this->assertClickhouseTotal(1);
+        $this->assertClickhouseContainsMigration('my_migration');
         $this->artisan('clickhouse-migrate:rollback');
         $this->assertClickhouseTotal(0);
     }
@@ -41,17 +42,18 @@ class MigrationCreatorTest extends TestCase
     {
         $filesystem = new Filesystem();
         $stub = new MigrationStub($filesystem, [app(MyCustomStubHandler::class)]);
-        $creator = new MigrationCreator($filesystem, $stub);
+        $creator = new MigrationCreatorExtended($filesystem, $stub);
 
         $creator->create(
             $this->assetsPath('stubs/dynamic.stub'),
-            'MyMigrationPath',
+            'CreateMyMigration2Table',
             $this->dynamicPath('migrations'),
             ['myCustomParameter' => 'products']
         );
 
         $this->artisan('clickhouse-migrate');
         $this->assertClickhouseTotal(1);
+        $this->assertClickhouseContainsMigration('my_migration2');
         $this->artisan('clickhouse-migrate:rollback');
         $this->assertClickhouseTotal(0);
     }
