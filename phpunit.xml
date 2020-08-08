@@ -8,6 +8,7 @@
         <testsuite name="Unit">
             <directory suffix="Test.php">./tests</directory>
             <exclude>./tests/assets</exclude>
+            <exclude>./tests/dynamic</exclude>
         </testsuite>
     </testsuites>
     <filter>

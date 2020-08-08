@@ -10,6 +10,8 @@ use Alexeykhr\ClickhouseMigrations\Migrations\MigrationRepository;
 
 class TestCase extends BaseCase
 {
+    use InteractsWithAssets;
+
     /**
      * @inheritDoc
      */
@@ -61,12 +63,17 @@ class TestCase extends BaseCase
     }
 
     /**
-     * @param  string  $path
-     * @return string
+     * @inheritDoc
      */
-    protected function assetsPath(string $path = ''): string
+    protected function setUpTraits(): array
     {
-        return __DIR__.DIRECTORY_SEPARATOR.'assets'.($path ? DIRECTORY_SEPARATOR.$path : $path);
+        $uses = parent::setUpTraits();
+
+        if (isset($uses[InteractsWithAssets::class])) {
+            $this->refreshDynamic();
+        }
+
+        return $uses;
     }
 
     /**
@@ -77,6 +84,7 @@ class TestCase extends BaseCase
         parent::getEnvironmentSetUp($app);
 
         $content = require __DIR__.'/../config/clickhouse.php';
+        $content['migrations']['path'] = $this->dynamicPath('migrations');
 
         $app->config->set(['clickhouse' => $content]);
     }
