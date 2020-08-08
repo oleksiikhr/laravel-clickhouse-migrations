@@ -4,10 +4,10 @@ namespace Alexeykhr\ClickhouseMigrations\Migrations;
 
 use Illuminate\Support\Str;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Alexeykhr\ClickhouseMigrations\Contracts\MigrationStubContract;
+use Alexeykhr\ClickhouseMigrations\Contracts\MigrationCreatorContract;
 
-class MigrationCreator
+class MigrationCreator implements MigrationCreatorContract
 {
     /**
      * @var Filesystem
@@ -26,14 +26,7 @@ class MigrationCreator
     }
 
     /**
-     * Create a new migration from stub file
-     *
-     * @param  string  $stubPath
-     * @param  string  $fileName
-     * @param  string  $migrationPath
-     * @param  array  $parameters
-     * @return string|null path to file
-     * @throws FileNotFoundException
+     * @inheritDoc
      */
     public function create(string $stubPath, string $fileName, string $migrationPath, array $parameters = []): ?string
     {
@@ -49,7 +42,7 @@ class MigrationCreator
     }
 
     /**
-     * @return MigrationStubContract
+     * @inheritDoc
      */
     public function getStub(): MigrationStubContract
     {
@@ -57,10 +50,9 @@ class MigrationCreator
     }
 
     /**
-     * @param  MigrationStubContract  $stub
-     * @return $this
+     * @inheritDoc
      */
-    public function setStub(MigrationStubContract $stub): self
+    public function setStub(MigrationStubContract $stub): MigrationCreatorContract
     {
         $this->stub = $stub;
 

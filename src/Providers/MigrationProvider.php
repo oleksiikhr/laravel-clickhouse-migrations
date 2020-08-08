@@ -6,10 +6,13 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\ServiceProvider;
 use Alexeykhr\ClickhouseMigrations\Clickhouse;
 use Alexeykhr\ClickhouseMigrations\Migrations\Migrator;
+use Alexeykhr\ClickhouseMigrations\Stubs\MigrationStub;
 use Alexeykhr\ClickhouseMigrations\Commands\MigrateCommand;
 use Alexeykhr\ClickhouseMigrations\Commands\MigrateMakeCommand;
+use Alexeykhr\ClickhouseMigrations\Migrations\MigrationCreator;
 use Alexeykhr\ClickhouseMigrations\Migrations\MigrationRepository;
 use Alexeykhr\ClickhouseMigrations\Commands\MigrateRollbackCommand;
+use Alexeykhr\ClickhouseMigrations\Contracts\MigrationCreatorContract;
 
 class MigrationProvider extends ServiceProvider
 {
@@ -32,6 +35,13 @@ class MigrationProvider extends ServiceProvider
             $repository = new MigrationRepository($table, $client);
 
             return new Migrator($repository, $filesystem);
+        });
+
+        $this->app->bind(MigrationCreatorContract::class, static function ($app, array $parameters = []) {
+            $filesystem = $parameters['filesystem'] ?? app(Filesystem::class);
+            $stub = $parameters['stub'] ?? app(MigrationStub::class);
+
+            return new MigrationCreator($filesystem, $stub);
         });
     }
 
