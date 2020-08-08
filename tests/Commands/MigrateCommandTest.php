@@ -9,7 +9,7 @@ class MigrateCommandTest extends TestCase
     /**
      * @return void
      */
-    public function testMigrateWithEmptyFiles(): void
+    public function testEmptyFiles(): void
     {
         $this->artisan('clickhouse-migrate');
 
@@ -19,7 +19,7 @@ class MigrateCommandTest extends TestCase
     /**
      * @return void
      */
-    public function testMigrateWithSingleFile(): void
+    public function testSingleFile(): void
     {
         $this->useMigrations(['2020_01_01_000000_create_users_table']);
 
@@ -32,7 +32,7 @@ class MigrateCommandTest extends TestCase
     /**
      * @return void
      */
-    public function testMigrateOutputWithNotApply(): void
+    public function testOutputWithNotApply(): void
     {
         $this->useMigrations(['2020_01_01_000000_create_users_table']);
 
@@ -46,7 +46,7 @@ class MigrateCommandTest extends TestCase
     /**
      * @return void
      */
-    public function testMigrateOutputWithApply(): void
+    public function testOutputWithApply(): void
     {
         $this->useMigrations(['2020_01_01_000000_create_users_table']);
 
@@ -60,7 +60,7 @@ class MigrateCommandTest extends TestCase
     /**
      * @return void
      */
-    public function testMigrateOutputWithForce(): void
+    public function testOutputWithForce(): void
     {
         $this->useMigrations(['2020_01_01_000000_create_users_table']);
 
@@ -75,7 +75,7 @@ class MigrateCommandTest extends TestCase
     /**
      * @return void
      */
-    public function testMigrateWithCustomRealPath(): void
+    public function testCustomRealPath(): void
     {
         $this->useMigrations(['2020_01_01_000000_create_users_table']);
 
@@ -90,7 +90,7 @@ class MigrateCommandTest extends TestCase
     /**
      * @return void
      */
-    public function testMigrateZeroStep(): void
+    public function testZeroStep(): void
     {
         $this->useMigrations(['2020_01_01_000000_create_users_table', '2020_01_01_000000_create_users2_table']);
 
@@ -105,7 +105,7 @@ class MigrateCommandTest extends TestCase
     /**
      * @return void
      */
-    public function testMigrateSingleStep(): void
+    public function testSingleStep(): void
     {
         $this->useMigrations(['2020_01_01_000000_create_users_table', '2020_01_01_000000_create_users2_table']);
 
@@ -119,7 +119,7 @@ class MigrateCommandTest extends TestCase
     /**
      * @return void
      */
-    public function testMigrateTwoStep(): void
+    public function testTwoStep(): void
     {
         $this->useMigrations(['2020_01_01_000000_create_users_table', '2020_01_01_000000_create_users2_table']);
 
@@ -133,7 +133,7 @@ class MigrateCommandTest extends TestCase
     /**
      * @return void
      */
-    public function testMigrateTenStep(): void
+    public function testTenStep(): void
     {
         $this->useMigrations(['2020_01_01_000000_create_users_table', '2020_01_01_000000_create_users2_table']);
 
