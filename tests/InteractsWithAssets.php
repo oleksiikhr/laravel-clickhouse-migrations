@@ -13,7 +13,7 @@ trait InteractsWithAssets
     {
         foreach ($fileNames as $fileName) {
             if ($usePrefix) {
-                $fileName = '2020_01_01_000000_create_'.$fileName.'_table';
+                $fileName = $this->migrationPrefix($fileName);
             }
 
             copy(
@@ -39,6 +39,15 @@ trait InteractsWithAssets
     public function dynamicPath(string $path = ''): string
     {
         return $this->resolvePath('assets/dynamic', $path);
+    }
+
+    /**
+     * @param  string  $fileName
+     * @return string
+     */
+    public function migrationPrefix(string $fileName): string
+    {
+        return '2020_01_01_000000_create_'.$fileName.'_table';
     }
 
     /**

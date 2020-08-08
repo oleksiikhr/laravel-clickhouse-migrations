@@ -21,12 +21,26 @@ trait AssertsClickhouse
     public function assertClickhouseContainsMigration(string $migration, bool $usePrefix = true): void
     {
         if ($usePrefix) {
-            $migration = '2020_01_01_000000_create_'.$migration.'_table';
+            $migration = $this->migrationPrefix($migration);
         }
 
         $result = $this->repository()->find($migration);
 
         self::assertNotNull($result);
         self::assertContains($migration, $result);
+    }
+
+    /**
+     * @param  string  $fileName
+     * @param  bool  $usePrefix
+     * @return void
+     */
+    public function assertClickhouseMigrationFile(string $fileName, bool $usePrefix = true): void
+    {
+        if ($usePrefix) {
+            $fileName = $this->migrationPrefix($fileName);
+        }
+
+        self::assertFileExists($this->dynamicPath('migrations/'.$fileName.'.php'));
     }
 }
