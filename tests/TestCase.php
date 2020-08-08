@@ -4,10 +4,11 @@ namespace Alexeykhr\ClickhouseMigrations\Tests;
 
 use Orchestra\Testbench\TestCase as BaseCase;
 use Alexeykhr\ClickhouseMigrations\Providers\MigrationProvider;
+use Alexeykhr\ClickhouseMigrations\Tests\Asserts\AssertsClickhouse;
 
 class TestCase extends BaseCase
 {
-    use InteractsWithAssets, InteractsWithClickhouse;
+    use InteractsWithAssets, InteractsWithClickhouse, AssertsClickhouse;
 
     /**
      * @inheritDoc

@@ -13,7 +13,7 @@ class MigrateCommandTest extends TestCase
     {
         $this->artisan('clickhouse-migrate');
 
-        self::assertEquals(0, $this->repository()->total());
+        $this->assertClickhouseTotal(0);
     }
 
     /**
@@ -25,10 +25,7 @@ class MigrateCommandTest extends TestCase
 
         $this->artisan('clickhouse-migrate');
 
-        self::assertEquals(1, $this->repository()->total());
-
-        $migration = $this->repository()->find('2020_01_01_000000_create_users_table');
-
-        self::assertContains('2020_01_01_000000_create_users_table', $migration);
+        $this->assertClickhouseTotal(1);
+        $this->assertClickhouseContainsMigration('2020_01_01_000000_create_users_table');
     }
 }
