@@ -2,13 +2,21 @@
 
 namespace Alexeykhr\ClickhouseMigrations\Concerns;
 
+use Generator;
+use Alexeykhr\ClickhouseMigrations\Migrations\Migrator;
+
 trait MigrationOutput
 {
     /**
-     * @param  \Generator  $migrations
+     * @var Migrator
+     */
+    protected $migrator;
+
+    /**
+     * @param  Generator  $migrations
      * @return bool
      */
-    public function outputMigrations(\Generator $migrations): bool
+    public function outputMigrations(Generator $migrations): bool
     {
         if (! $migrations->valid()) {
             $this->comment('<info>Migrations are empty!</info>');
@@ -36,10 +44,10 @@ trait MigrationOutput
     }
 
     /**
-     * @param  \Generator  $migrations
+     * @param  Generator  $migrations
      * @return void
      */
-    protected function outputWriteMigrations(\Generator $migrations): void
+    protected function outputWriteMigrations(Generator $migrations): void
     {
         $this->output->newLine();
         $this->output->writeln("<info>   Migrations for execution:</info>");

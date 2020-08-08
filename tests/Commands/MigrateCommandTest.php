@@ -32,6 +32,49 @@ class MigrateCommandTest extends TestCase
     /**
      * @return void
      */
+    public function testMigrateOutputWithNotApply(): void
+    {
+        $this->useMigrations(['2020_01_01_000000_create_users_table']);
+
+        $this->artisan('clickhouse-migrate', [
+            '--output' => true,
+        ])->expectsConfirmation('Apply migrations?', 'no');
+
+        $this->assertClickhouseTotal(0);
+    }
+
+    /**
+     * @return void
+     */
+    public function testMigrateOutputWithApply(): void
+    {
+        $this->useMigrations(['2020_01_01_000000_create_users_table']);
+
+        $this->artisan('clickhouse-migrate', [
+            '--output' => true,
+        ])->expectsConfirmation('Apply migrations?', 'yes');
+
+        $this->assertClickhouseTotal(1);
+    }
+
+    /**
+     * @return void
+     */
+    public function testMigrateOutputWithForce(): void
+    {
+        $this->useMigrations(['2020_01_01_000000_create_users_table']);
+
+        $this->artisan('clickhouse-migrate', [
+            '--output' => true,
+            '--force' => true,
+        ]);
+
+        $this->assertClickhouseTotal(1);
+    }
+
+    /**
+     * @return void
+     */
     public function testMigrateZeroStep(): void
     {
         $this->useMigrations(['2020_01_01_000000_create_users_table', '2020_01_01_000000_create_users2_table']);

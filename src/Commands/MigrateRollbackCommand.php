@@ -36,6 +36,8 @@ class MigrateRollbackCommand extends Command
      */
     public function handle(Migrator $migrator): void
     {
+        $this->migrator = $migrator;
+
         $migrator->ensureTableExists()
             ->setOutput($this->getOutput())
             ->setMigrationPath($this->getMigrationPath());
