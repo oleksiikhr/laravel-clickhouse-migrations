@@ -12,18 +12,18 @@ class MigrationRepositoryTest extends TestCase
      */
     public function testCreateTable(): void
     {
-        $repository = new MigrationRepository('myTable1', $this->getClient());
+        $repository = new MigrationRepository('myTable1', $this->clickhouse());
 
         $checkTablePresent = function () {
-            return (bool) $this->getClient()->select("EXISTS TABLE myTable1")
+            return (bool) $this->clickhouse()->select("EXISTS TABLE myTable1")
                 ->fetchOne('result');
         };
 
-        $this->assertFalse($checkTablePresent());
+        self::assertFalse($checkTablePresent());
 
         $repository->create();
 
-        $this->assertTrue($checkTablePresent());
+        self::assertTrue($checkTablePresent());
     }
 
     /**
@@ -31,17 +31,17 @@ class MigrationRepositoryTest extends TestCase
      */
     public function testGetAllMigrations(): void
     {
-        $repository = new MigrationRepository('t', $this->getClient());
+        $repository = new MigrationRepository('t', $this->clickhouse());
         $repository->create();
 
-        $this->getClient()->write("INSERT INTO t (migration, batch) VALUES ('m_1', 1), ('m_2', 1), ('m_3', 2)");
+        $this->clickhouse()->write("INSERT INTO t (migration, batch) VALUES ('m_1', 1), ('m_2', 1), ('m_3', 2)");
 
         $migrations = $repository->all();
 
-        $this->assertContains('m_1', $migrations);
-        $this->assertContains('m_2', $migrations);
-        $this->assertContains('m_3', $migrations);
-        $this->assertCount(3, $migrations);
+        self::assertContains('m_1', $migrations);
+        self::assertContains('m_2', $migrations);
+        self::assertContains('m_3', $migrations);
+        self::assertCount(3, $migrations);
     }
 
     /**
@@ -49,22 +49,22 @@ class MigrationRepositoryTest extends TestCase
      */
     public function testGetLatestMigrations(): void
     {
-        $repository = new MigrationRepository('t', $this->getClient());
+        $repository = new MigrationRepository('t', $this->clickhouse());
         $repository->create();
 
-        $this->getClient()->write("INSERT INTO t (migration, batch) VALUES ('m_1', 1), ('m_2', 1)");
-        $this->getClient()->write("INSERT INTO t (migration, batch) VALUES ('m_3', 5), ('m_4', 3)");
-        $this->getClient()->write("INSERT INTO t (migration, batch) VALUES ('m_5', 2), ('m_7', 2), ('m_6', 2)");
+        $this->clickhouse()->write("INSERT INTO t (migration, batch) VALUES ('m_1', 1), ('m_2', 1)");
+        $this->clickhouse()->write("INSERT INTO t (migration, batch) VALUES ('m_3', 5), ('m_4', 3)");
+        $this->clickhouse()->write("INSERT INTO t (migration, batch) VALUES ('m_5', 2), ('m_7', 2), ('m_6', 2)");
 
         $migrations = $repository->latest();
 
-        $this->assertEquals($migrations[0], 'm_3'); // because last batch
-        $this->assertEquals($migrations[1], 'm_4');
-        $this->assertEquals($migrations[2], 'm_7'); // executed last because of the name
-        $this->assertEquals($migrations[3], 'm_6');
-        $this->assertEquals($migrations[4], 'm_5');
-        $this->assertEquals($migrations[5], 'm_2');
-        $this->assertEquals($migrations[6], 'm_1');
+        self::assertEquals('m_3', $migrations[0]); // because last batch
+        self::assertEquals('m_4', $migrations[1]);
+        self::assertEquals('m_7', $migrations[2]); // executed last because of the name
+        self::assertEquals('m_6', $migrations[3]);
+        self::assertEquals('m_5', $migrations[4]);
+        self::assertEquals('m_2', $migrations[5]);
+        self::assertEquals('m_1', $migrations[6]);
     }
 
     /**
@@ -72,14 +72,14 @@ class MigrationRepositoryTest extends TestCase
      */
     public function testLastBatchNumber(): void
     {
-        $repository = new MigrationRepository('t', $this->getClient());
+        $repository = new MigrationRepository('t', $this->clickhouse());
         $repository->create();
 
-        $this->assertEquals($repository->getLastBatchNumber(), 0);
+        self::assertEquals(0, $repository->getLastBatchNumber());
 
-        $this->getClient()->write("INSERT INTO t (migration, batch) VALUES ('m_2', 11), ('m_1', 6)");
+        $this->clickhouse()->write("INSERT INTO t (migration, batch) VALUES ('m_2', 11), ('m_1', 6)");
 
-        $this->assertEquals($repository->getLastBatchNumber(), 11);
+        self::assertEquals(11, $repository->getLastBatchNumber());
     }
 
     /**
@@ -87,14 +87,14 @@ class MigrationRepositoryTest extends TestCase
      */
     public function testNextBatchNumber(): void
     {
-        $repository = new MigrationRepository('t', $this->getClient());
+        $repository = new MigrationRepository('t', $this->clickhouse());
         $repository->create();
 
-        $this->assertEquals($repository->getNextBatchNumber(), 1);
+        self::assertEquals(1, $repository->getNextBatchNumber());
 
-        $this->getClient()->write("INSERT INTO t (migration, batch) VALUES ('m_2', 11), ('m_1', 6)");
+        $this->clickhouse()->write("INSERT INTO t (migration, batch) VALUES ('m_2', 11), ('m_1', 6)");
 
-        $this->assertEquals($repository->getNextBatchNumber(), 12);
+        self::assertEquals(12, $repository->getNextBatchNumber());
     }
 
     /**
@@ -102,21 +102,21 @@ class MigrationRepositoryTest extends TestCase
      */
     public function testAddMigration(): void
     {
-        $repository = new MigrationRepository('t', $this->getClient());
+        $repository = new MigrationRepository('t', $this->clickhouse());
         $repository->create();
 
         $repository->add('m_1', 1);
         $repository->add('m_2', 2);
         $repository->add('m_3', 2);
 
-        $migrations = $this->getClient()->select("SELECT * FROM t")->rowsAsTree('migration');
+        $migrations = $this->clickhouse()->select("SELECT * FROM t")->rowsAsTree('migration');
 
-        $this->assertArrayHasKey('m_1', $migrations);
-        $this->assertEquals($migrations['m_1']['batch'], 1);
-        $this->assertArrayHasKey('m_1', $migrations);
-        $this->assertEquals($migrations['m_2']['batch'], 2);
-        $this->assertArrayHasKey('m_1', $migrations);
-        $this->assertEquals($migrations['m_3']['batch'], 2);
+        self::assertArrayHasKey('m_1', $migrations);
+        self::assertEquals(1, $migrations['m_1']['batch']);
+        self::assertArrayHasKey('m_1', $migrations);
+        self::assertEquals(2, $migrations['m_2']['batch']);
+        self::assertArrayHasKey('m_1', $migrations);
+        self::assertEquals(2, $migrations['m_3']['batch']);
     }
 
     /**
@@ -124,14 +124,14 @@ class MigrationRepositoryTest extends TestCase
      */
     public function testDeleteMigration(): void
     {
-        $repository = new MigrationRepository('t', $this->getClient());
+        $repository = new MigrationRepository('t', $this->clickhouse());
         $repository->create();
 
-        $this->getClient()->write("INSERT INTO t (migration, batch) VALUES ('m_2', 11), ('m_1', 6), ('m_3', 4)");
+        $this->clickhouse()->write("INSERT INTO t (migration, batch) VALUES ('m_2', 11), ('m_1', 6), ('m_3', 4)");
 
         $repository->delete('m_3');
 
-        $this->assertNotContains('m_3', $repository->latest());
+        self::assertNotContains('m_3', $repository->latest());
     }
 
     /**
@@ -139,13 +139,13 @@ class MigrationRepositoryTest extends TestCase
      */
     public function testExistsTable(): void
     {
-        $repository = new MigrationRepository('myTable2', $this->getClient());
+        $repository = new MigrationRepository('myTable2', $this->clickhouse());
 
-        $this->assertFalse($repository->exists());
+        self::assertFalse($repository->exists());
 
-        $this->getClient()->write("CREATE TABLE myTable2 (date DateTime) ENGINE = MergeTree() ORDER BY date");
+        $this->clickhouse()->write("CREATE TABLE myTable2 (date DateTime) ENGINE = MergeTree() ORDER BY date");
 
-        $this->assertTrue($repository->exists());
+        self::assertTrue($repository->exists());
     }
 
     /**
@@ -153,13 +153,13 @@ class MigrationRepositoryTest extends TestCase
      */
     public function testFindMigration(): void
     {
-        $repository = new MigrationRepository('t', $this->getClient());
+        $repository = new MigrationRepository('t', $this->clickhouse());
         $repository->create();
 
-        $this->getClient()->write("INSERT INTO t (migration, batch) VALUES ('m_2', 11), ('m_1', 6), ('m_3', 4)");
+        $this->clickhouse()->write("INSERT INTO t (migration, batch) VALUES ('m_2', 11), ('m_1', 6), ('m_3', 4)");
 
         $migration = $repository->find('m_1');
 
-        $this->assertContains('m_1', $migration);
+        self::assertContains('m_1', $migration);
     }
 }

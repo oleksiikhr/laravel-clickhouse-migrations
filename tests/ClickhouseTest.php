@@ -25,12 +25,12 @@ class ClickhouseTest extends TestCase
 
         $client = $clickhouse->getClient();
 
-        $this->assertEquals('example.com', $client->getConnectHost());
-        $this->assertEquals(9000, $client->getConnectPort());
-        $this->assertEquals('user1', $client->getConnectUsername());
-        $this->assertEquals('12345', $client->getConnectPassword());
-        $this->assertEquals(151, $client->getConnectTimeOut());
-        $this->assertEquals(150, $client->getTimeout());
-        $this->assertEquals('my_db1', $client->settings()->getDatabase());
+        self::assertEquals('example.com', $client->getConnectHost());
+        self::assertEquals(9000, $client->getConnectPort());
+        self::assertEquals('user1', $client->getConnectUsername());
+        self::assertEquals('12345', $client->getConnectPassword());
+        self::assertEquals(151, $client->getConnectTimeOut());
+        self::assertEquals(150, $client->getTimeout());
+        self::assertEquals('my_db1', $client->settings()->getDatabase());
     }
 }

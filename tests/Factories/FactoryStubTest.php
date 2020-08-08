@@ -18,7 +18,7 @@ class FactoryStubTest extends TestCase
 
         $stubFile = FactoryStub::make(key($stubs));
 
-        $this->assertStringContainsString($stubFile, $stubs[key($stubs)]);
+        self::assertStringContainsString($stubs[key($stubs)], $stubFile);
     }
 
     /**
@@ -34,7 +34,7 @@ class FactoryStubTest extends TestCase
 
         $stubFile = FactoryStub::make($existsStubKey);
 
-        $this->assertEquals($stubFile, $existsStubValue.'/new/path');
+        self::assertEquals($existsStubValue.'/new/path', $stubFile);
     }
 
     /**
@@ -45,9 +45,9 @@ class FactoryStubTest extends TestCase
         try {
             FactoryStub::make('non-exists-type');
 
-            $this->fail('Exception not thrown');
+            self::fail('Exception not thrown');
         } catch (\Exception $e) {
-            $this->assertEquals(get_class($e), ClickhouseStubException::class);
+            self::assertEquals(ClickhouseStubException::class, get_class($e));
         }
     }
 }
