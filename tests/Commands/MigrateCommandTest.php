@@ -75,6 +75,21 @@ class MigrateCommandTest extends TestCase
     /**
      * @return void
      */
+    public function testMigrateWithCustomRealPath(): void
+    {
+        $this->useMigrations(['2020_01_01_000000_create_users_table']);
+
+        $this->artisan('clickhouse-migrate', [
+            '--path' => $this->dynamicPath('migrations'),
+            '--realpath' => true,
+        ]);
+
+        $this->assertClickhouseTotal(1);
+    }
+
+    /**
+     * @return void
+     */
     public function testMigrateZeroStep(): void
     {
         $this->useMigrations(['2020_01_01_000000_create_users_table', '2020_01_01_000000_create_users2_table']);
