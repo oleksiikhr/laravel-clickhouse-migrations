@@ -8,7 +8,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | Here you can configure a connection to connect to the ClickHouse
-    | database and specify additional configurations
+    | database and specify additional configurations.
     |
     */
 
@@ -29,7 +29,7 @@ return [
     | ClickHouse Migrations
     |--------------------------------------------------------------------------
     |
-    | ClickHouse settings for working with migrations
+    | ClickHouse settings for working with migrations.
     |
     */
 
@@ -43,11 +43,24 @@ return [
     | ClickHouse Stubs
     |--------------------------------------------------------------------------
     |
+    | You can prepare various stub files in order to quickly create
+    | migrations on the prepared code.
+    |
     */
 
     'stubs' => [
        // 'default' => base_path('stubs/file.stub),
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | ClickHouse Handlers
+    |--------------------------------------------------------------------------
+    |
+    | In addition to custom stubs, you can also add your own stub file handlers,
+    | and pass the command through artisan.
+    |
+    */
 
     'handlers' => [
        // 'App\Clickhouse\Handlers\MyHandler',
