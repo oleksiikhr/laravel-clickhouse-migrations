@@ -28,10 +28,10 @@ trait InteractsWithClickhouse
         static $clickhouse;
 
         return $clickhouse ?? $clickhouse = (new Clickhouse([
-                'host' => 'localhost',
-                'port' => 8123,
-                'username' => 'default',
-                'password' => '',
+                'host' => env('CLICKHOUSE_HOST', '0.0.0.0'),
+                'port' => env('CLICKHOUSE_PORT', 8123),
+                'username' => env('CLICKHOUSE_USER', 'bot'),
+                'password' => env('CLICKHOUSE_PASS', ''),
                 'options' => [
                     'database' => 'default',
                     'timeout' => 1,

@@ -4,7 +4,12 @@ services:
   clickhouse:
     image: yandex/clickhouse-server:20.5
     volumes:
-      - ./.docker/users.xml:/etc/clickhouse-server/users.xml
+      - ./.docker/clickhouse-server/users.d:/etc/clickhouse-server/users.d
+    healthcheck:
+      test: wget --spider -q 0.0.0.0:8123/ping
+      interval: 5s
+      timeout: 3s
+      retries: 5
     ports:
       - 8123:8123
       - 9000:9000

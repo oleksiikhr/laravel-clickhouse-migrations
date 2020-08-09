@@ -1,0 +1,14 @@
+<yandex>
+    <profiles>
+        <default>
+            <mutations_sync>2</mutations_sync>
+        </default>
+    </profiles>
+    <users>
+        <bot>
+            <profile>bot</profile>
+            <password />
+            <quota>default</quota>
+        </bot>
+    </users>
+</yandex>
