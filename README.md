@@ -2,6 +2,7 @@
 
 ![Build](https://github.com/Alexeykhr/laravel-clickhouse-migrations/workflows/PHP%20Composer/badge.svg)
 [![Latest Stable Version](https://img.shields.io/packagist/v/alexeykhr/laravel-clickhouse-migrations.svg)](https://packagist.org/packages/alexeykhr/laravel-clickhouse-migrations)
+[![codecov](https://codecov.io/gh/Alexeykhr/laravel-clickhouse-migrations/branch/master/graph/badge.svg)](https://codecov.io/gh/Alexeykhr/laravel-clickhouse-migrations)
 [![Total Downloads](https://img.shields.io/packagist/dt/alexeykhr/laravel-clickhouse-migrations.svg)](https://packagist.org/packages/alexeykhr/laravel-clickhouse-migrations)
 [![Downloads Month](https://img.shields.io/packagist/dm/alexeykhr/laravel-clickhouse-migrations.svg)](https://packagist.org/packages/alexeykhr/laravel-clickhouse-migrations)
 
