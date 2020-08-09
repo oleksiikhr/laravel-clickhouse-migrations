@@ -4,18 +4,14 @@ namespace Alexeykhr\ClickhouseMigrations\Contracts;
 
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 
-interface ClickhouseStubContract
+interface MigrationStubContract
 {
     /**
-     * @param  string  $className
+     * @param  string  $fileName
+     * @param  string  $stubPath
      * @param  array  $parameters
      * @return string
      * @throws FileNotFoundException
      */
-    public function generate(string $className, array $parameters = []): string;
-
-    /**
-     * @return string
-     */
-    public function getFilename(): string;
+    public function generate(string $fileName, string $stubPath, array $parameters = []): string;
 }

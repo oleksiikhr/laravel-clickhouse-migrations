@@ -9,24 +9,24 @@ use Alexeykhr\ClickhouseMigrations\Concerns\MigrationPath;
 use Alexeykhr\ClickhouseMigrations\Concerns\MigrationStep;
 use Alexeykhr\ClickhouseMigrations\Concerns\MigrationOutput;
 
-class MigrateCommand extends Command
+class MigrateRollbackCommand extends Command
 {
     use ConfirmableTrait, MigrationPath, MigrationStep, MigrationOutput;
 
     /**
      * @inheritDoc
      */
-    protected $signature = 'clickhouse-migrate
+    protected $signature = 'clickhouse-migrate:rollback
                 {--force : Force the operation to run when in production}
                 {--output : Show migrations to apply before executing}
                 {--path= : Path to Clickhouse directory with migrations}
                 {--realpath : Indicate any provided migration file paths are pre-resolved absolute paths}
-                {--step= : Number of migrations to rollback}';
+                {--step=1 : Number of migrations to rollback}';
 
     /**
      * @inheritDoc
      */
-    protected $description = 'Run the ClickHouse database migrations';
+    protected $description = 'Rollback the ClickHouse database migrations';
 
     /**
      * Execute the console command
@@ -42,12 +42,12 @@ class MigrateCommand extends Command
             ->setOutput($this->getOutput())
             ->setMigrationPath($this->getMigrationPath());
 
-        $migrations = $migrator->getMigrationsUp();
+        $migrations = $migrator->getMigrationsDown();
 
         if (! $this->outputMigrations($migrations) || ! $this->confirmToProceed()) {
             return;
         }
 
-        $migrator->runUp($this->getStep());
+        $migrator->runDown($this->getStep());
     }
 }

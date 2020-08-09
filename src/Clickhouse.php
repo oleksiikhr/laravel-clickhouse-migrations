@@ -3,19 +3,20 @@
 namespace Alexeykhr\ClickhouseMigrations;
 
 use ClickHouseDB\Client;
-use Illuminate\Contracts\Container\BindingResolutionException;
+use Alexeykhr\ClickhouseMigrations\Exceptions\ClickhouseConfigException;
 
 class Clickhouse
 {
     /**
      * @var Client
      */
-    protected $client;
+    private $client;
 
     public function __construct(array $config = [])
     {
-        $config = $config ?: $this->getConfig();
+        $config = $config ?: $this->getDefaultConfig();
 
+        /** @noinspection PhpUnhandledExceptionInspection */
         $this->client = $this->makeClient($config);
     }
 
@@ -39,8 +40,11 @@ class Clickhouse
     }
 
     /**
+     * Creating a new instance of ClickHouse Client
+     *
      * @param  array  $config
      * @return Client
+     * @throws ClickhouseConfigException
      */
     protected function makeClient(array $config): Client
     {
@@ -60,7 +64,7 @@ class Clickhouse
             } elseif (method_exists($client, 'set'.ucwords($option))) {
                 $method = 'set'.ucwords($option);
             } else {
-                throw new \RuntimeException('Unknown ClickHouse DB option "'.$option.'"');
+                throw new ClickhouseConfigException("Unknown ClickHouse DB option {$option}");
             }
 
             $client->$method($value);
@@ -71,10 +75,9 @@ class Clickhouse
 
     /**
      * @return array
-     * @throws BindingResolutionException
      */
-    protected function getConfig(): array
+    protected function getDefaultConfig(): array
     {
-        return app()->make('config')->get('clickhouse.config', []);
+        return config('clickhouse.config', []);
     }
 }
