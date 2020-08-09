@@ -49,7 +49,7 @@ return [
     */
 
     'stubs' => [
-        // 'default' => base_path('stubs/file.stub),
+        //'default' => base_path('stubs/file.stub),
     ],
 
     /*
@@ -63,6 +63,6 @@ return [
     */
 
     'handlers' => [
-        // 'App\Clickhouse\Handlers\MyHandler',
+        //'App\Clickhouse\Handlers\MyHandler',
     ],
 ];
