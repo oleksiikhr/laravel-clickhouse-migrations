@@ -43,6 +43,6 @@
         "sort-packages": true
     },
     "scripts": {
-        "test": "phpunit"
+        "test": "vendor/bin/phpunit"
     }
 }
