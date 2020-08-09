@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Alexeykhr\ClickhouseMigrations\Tests\Migrations;
 
-use Alexeykhr\ClickhouseMigrations\Migrations\MigrationRepository;
 use Alexeykhr\ClickhouseMigrations\Tests\TestCase;
+use Alexeykhr\ClickhouseMigrations\Migrations\MigrationRepository;
 
 class MigrationRepositoryTest extends TestCase
 {

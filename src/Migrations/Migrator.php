@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Alexeykhr\ClickhouseMigrations\Migrations;
 
-use Alexeykhr\ClickhouseMigrations\Contracts\ClickhouseMigrationContract;
+use Illuminate\Support\Str;
 use Illuminate\Console\OutputStyle;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Str;
 use Symfony\Component\Finder\SplFileInfo;
+use Alexeykhr\ClickhouseMigrations\Contracts\ClickhouseMigrationContract;
 
 class Migrator
 {

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Alexeykhr\ClickhouseMigrations;
 
-use Alexeykhr\ClickhouseMigrations\Contracts\ClickhouseMigrationContract;
 use ClickHouseDB\Client;
+use Alexeykhr\ClickhouseMigrations\Contracts\ClickhouseMigrationContract;
 
 abstract class ClickhouseMigration implements ClickhouseMigrationContract
 {

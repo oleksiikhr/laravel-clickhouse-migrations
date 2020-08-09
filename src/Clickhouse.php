@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Alexeykhr\ClickhouseMigrations;
 
-use Alexeykhr\ClickhouseMigrations\Exceptions\ClickhouseConfigException;
 use ClickHouseDB\Client;
+use Alexeykhr\ClickhouseMigrations\Exceptions\ClickhouseConfigException;
 
 class Clickhouse
 {

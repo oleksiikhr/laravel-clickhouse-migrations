@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Alexeykhr\ClickhouseMigrations\Tests\Commands;
 
-use Alexeykhr\ClickhouseMigrations\Tests\TestCase;
 use ClickHouseDB\Exception\DatabaseException;
+use Alexeykhr\ClickhouseMigrations\Tests\TestCase;
 
 class MigrateCommandTest extends TestCase
 {

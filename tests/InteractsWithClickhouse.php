@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Alexeykhr\ClickhouseMigrations\Tests;
 
+use ClickHouseDB\Client;
 use Alexeykhr\ClickhouseMigrations\Clickhouse;
 use Alexeykhr\ClickhouseMigrations\Migrations\MigrationRepository;
-use ClickHouseDB\Client;
 
 trait InteractsWithClickhouse
 {

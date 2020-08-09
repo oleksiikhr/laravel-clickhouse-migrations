@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Alexeykhr\ClickhouseMigrations\Tests\Commands;
 
-use Alexeykhr\ClickhouseMigrations\Contracts\MigrationCreatorContract;
-use Alexeykhr\ClickhouseMigrations\Stubs\MigrationStub;
-use Alexeykhr\ClickhouseMigrations\Tests\assets\MigrationCreatorExtended;
-use Alexeykhr\ClickhouseMigrations\Tests\assets\MyCustomStubHandler;
-use Alexeykhr\ClickhouseMigrations\Tests\TestCase;
 use Illuminate\Filesystem\Filesystem;
+use Alexeykhr\ClickhouseMigrations\Tests\TestCase;
+use Alexeykhr\ClickhouseMigrations\Stubs\MigrationStub;
+use Alexeykhr\ClickhouseMigrations\Tests\assets\MyCustomStubHandler;
+use Alexeykhr\ClickhouseMigrations\Contracts\MigrationCreatorContract;
+use Alexeykhr\ClickhouseMigrations\Tests\assets\MigrationCreatorExtended;
 
 class MigrateMakeCommandTest extends TestCase
 {

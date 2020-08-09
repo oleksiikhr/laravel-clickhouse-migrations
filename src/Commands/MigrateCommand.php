@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Alexeykhr\ClickhouseMigrations\Commands;
 
-use Alexeykhr\ClickhouseMigrations\Concerns\MigrationOutput;
-use Alexeykhr\ClickhouseMigrations\Concerns\MigrationPath;
-use Alexeykhr\ClickhouseMigrations\Concerns\MigrationStep;
-use Alexeykhr\ClickhouseMigrations\Migrations\Migrator;
 use Illuminate\Console\Command;
 use Illuminate\Console\ConfirmableTrait;
+use Alexeykhr\ClickhouseMigrations\Migrations\Migrator;
+use Alexeykhr\ClickhouseMigrations\Concerns\MigrationPath;
+use Alexeykhr\ClickhouseMigrations\Concerns\MigrationStep;
+use Alexeykhr\ClickhouseMigrations\Concerns\MigrationOutput;
 
 class MigrateCommand extends Command
 {

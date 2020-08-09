@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Alexeykhr\ClickhouseMigrations\Concerns;
 
-use Alexeykhr\ClickhouseMigrations\Contracts\MigrationStubHandlerContract;
 use Alexeykhr\ClickhouseMigrations\Stubs\Handlers\TableStubHandler;
+use Alexeykhr\ClickhouseMigrations\Contracts\MigrationStubHandlerContract;
 
 trait MigrationStubHandler
 {
