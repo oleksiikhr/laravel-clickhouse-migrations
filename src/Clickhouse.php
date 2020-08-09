@@ -1,9 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Alexeykhr\ClickhouseMigrations;
 
-use ClickHouseDB\Client;
 use Alexeykhr\ClickhouseMigrations\Exceptions\ClickhouseConfigException;
+use ClickHouseDB\Client;
 
 class Clickhouse
 {
@@ -40,7 +42,7 @@ class Clickhouse
     }
 
     /**
-     * Creating a new instance of ClickHouse Client
+     * Creating a new instance of ClickHouse Client.
      *
      * @param  array  $config
      * @return Client

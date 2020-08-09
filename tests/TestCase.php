@@ -1,17 +1,19 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Alexeykhr\ClickhouseMigrations\Tests;
 
-use Orchestra\Testbench\TestCase as BaseCase;
 use Alexeykhr\ClickhouseMigrations\Providers\MigrationProvider;
 use Alexeykhr\ClickhouseMigrations\Tests\Asserts\AssertsClickhouse;
+use Orchestra\Testbench\TestCase as BaseCase;
 
 class TestCase extends BaseCase
 {
     use InteractsWithAssets, InteractsWithClickhouse, AssertsClickhouse;
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function setUpTraits(): array
     {
@@ -29,7 +31,7 @@ class TestCase extends BaseCase
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getEnvironmentSetUp($app): void
     {
@@ -42,7 +44,7 @@ class TestCase extends BaseCase
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getPackageProviders($app): array
     {

@@ -1,23 +1,25 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Alexeykhr\ClickhouseMigrations\Providers;
 
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\ServiceProvider;
 use Alexeykhr\ClickhouseMigrations\Clickhouse;
-use Alexeykhr\ClickhouseMigrations\Migrations\Migrator;
-use Alexeykhr\ClickhouseMigrations\Stubs\MigrationStub;
 use Alexeykhr\ClickhouseMigrations\Commands\MigrateCommand;
 use Alexeykhr\ClickhouseMigrations\Commands\MigrateMakeCommand;
-use Alexeykhr\ClickhouseMigrations\Migrations\MigrationCreator;
-use Alexeykhr\ClickhouseMigrations\Migrations\MigrationRepository;
 use Alexeykhr\ClickhouseMigrations\Commands\MigrateRollbackCommand;
 use Alexeykhr\ClickhouseMigrations\Contracts\MigrationCreatorContract;
+use Alexeykhr\ClickhouseMigrations\Migrations\MigrationCreator;
+use Alexeykhr\ClickhouseMigrations\Migrations\MigrationRepository;
+use Alexeykhr\ClickhouseMigrations\Migrations\Migrator;
+use Alexeykhr\ClickhouseMigrations\Stubs\MigrationStub;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\ServiceProvider;
 
 class MigrationProvider extends ServiceProvider
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function register(): void
     {
@@ -46,7 +48,7 @@ class MigrationProvider extends ServiceProvider
     }
 
     /**
-     * Bootstrap services
+     * Bootstrap services.
      *
      * @return void
      */

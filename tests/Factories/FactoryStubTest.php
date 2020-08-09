@@ -1,10 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Alexeykhr\ClickhouseMigrations\Tests\Factories;
 
-use Alexeykhr\ClickhouseMigrations\Tests\TestCase;
-use Alexeykhr\ClickhouseMigrations\Factories\FactoryStub;
 use Alexeykhr\ClickhouseMigrations\Exceptions\ClickhouseStubException;
+use Alexeykhr\ClickhouseMigrations\Factories\FactoryStub;
+use Alexeykhr\ClickhouseMigrations\Tests\TestCase;
 
 class FactoryStubTest extends TestCase
 {

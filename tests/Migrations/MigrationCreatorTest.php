@@ -1,13 +1,15 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Alexeykhr\ClickhouseMigrations\Tests\Migrations;
 
-use Illuminate\Filesystem\Filesystem;
-use Alexeykhr\ClickhouseMigrations\Tests\TestCase;
 use Alexeykhr\ClickhouseMigrations\Stubs\MigrationStub;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Alexeykhr\ClickhouseMigrations\Tests\assets\MyCustomStubHandler;
 use Alexeykhr\ClickhouseMigrations\Tests\assets\MigrationCreatorExtended;
+use Alexeykhr\ClickhouseMigrations\Tests\assets\MyCustomStubHandler;
+use Alexeykhr\ClickhouseMigrations\Tests\TestCase;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Filesystem\Filesystem;
 
 class MigrationCreatorTest extends TestCase
 {

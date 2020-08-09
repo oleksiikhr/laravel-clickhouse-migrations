@@ -1,9 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Alexeykhr\ClickhouseMigrations\Tests\Commands;
 
-use ClickHouseDB\Exception\DatabaseException;
 use Alexeykhr\ClickhouseMigrations\Tests\TestCase;
+use ClickHouseDB\Exception\DatabaseException;
 
 class MigrateCommandTest extends TestCase
 {
