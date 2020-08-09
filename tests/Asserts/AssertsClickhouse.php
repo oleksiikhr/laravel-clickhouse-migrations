@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Alexeykhr\ClickhouseMigrations\Tests\Asserts;
 
@@ -68,7 +70,7 @@ trait AssertsClickhouse
      */
     private function existsTable(string $table): bool
     {
-        return (bool) $this->clickhouse()->select("EXISTS TABLE {table}", [
+        return (bool) $this->clickhouse()->select('EXISTS TABLE {table}', [
             'table' => $table,
         ])->fetchOne('result');
     }

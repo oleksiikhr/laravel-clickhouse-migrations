@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Alexeykhr\ClickhouseMigrations\Migrations;
 
@@ -24,13 +26,13 @@ class MigrationRepository
     }
 
     /**
-     * Creating a new table to store migrations
+     * Creating a new table to store migrations.
      *
      * @return Statement
      */
     public function create(): Statement
     {
-        return $this->client->write("
+        return $this->client->write('
             CREATE TABLE IF NOT EXISTS {table} (
                 migration String,
                 batch UInt32,
@@ -38,7 +40,7 @@ class MigrationRepository
             )
             ENGINE = ReplacingMergeTree()
             ORDER BY migration
-        ", [
+        ', [
             'table' => $this->table,
         ]);
     }
@@ -48,7 +50,7 @@ class MigrationRepository
      */
     public function all(): array
     {
-        $rows = $this->client->select("SELECT migration FROM {table}", [
+        $rows = $this->client->select('SELECT migration FROM {table}', [
             'table' => $this->table,
         ])->rows();
 
@@ -56,17 +58,17 @@ class MigrationRepository
     }
 
     /**
-     * Get latest accepted migrations
+     * Get latest accepted migrations.
      *
      * @return array
      */
     public function latest(): array
     {
-        $rows = $this->client->select("
+        $rows = $this->client->select('
             SELECT migration
             FROM {table}
             ORDER BY batch DESC, migration DESC
-        ", [
+        ', [
             'table' => $this->table,
         ])->rows();
 
@@ -87,7 +89,7 @@ class MigrationRepository
     public function getLastBatchNumber(): int
     {
         return $this->client
-            ->select("SELECT MAX(batch) AS batch FROM {table}", ['table' => $this->table])
+            ->select('SELECT MAX(batch) AS batch FROM {table}', ['table' => $this->table])
             ->fetchOne('batch');
     }
 
@@ -107,7 +109,7 @@ class MigrationRepository
      */
     public function delete(string $migration): Statement
     {
-        return $this->client->write("ALTER TABLE {table} DELETE WHERE migration=:migration", [
+        return $this->client->write('ALTER TABLE {table} DELETE WHERE migration=:migration', [
             'table' => $this->table,
             'migration' => $migration,
         ]);
@@ -118,7 +120,7 @@ class MigrationRepository
      */
     public function total(): int
     {
-        return (int) $this->client->select("SELECT COUNT(*) AS count FROM {table}", [
+        return (int) $this->client->select('SELECT COUNT(*) AS count FROM {table}', [
             'table' => $this->table,
         ])->fetchOne('count');
     }
@@ -128,7 +130,7 @@ class MigrationRepository
      */
     public function exists(): bool
     {
-        return (bool) $this->client->select("EXISTS TABLE {table}", [
+        return (bool) $this->client->select('EXISTS TABLE {table}', [
             'table' => $this->table,
         ])->fetchOne('result');
     }
@@ -139,7 +141,7 @@ class MigrationRepository
      */
     public function find(string $migration): ?array
     {
-        return $this->client->select("SELECT * FROM {table} WHERE migration=:migration LIMIT 1", [
+        return $this->client->select('SELECT * FROM {table} WHERE migration=:migration LIMIT 1', [
             'table' => $this->table,
             'migration' => $migration,
         ])->fetchOne();

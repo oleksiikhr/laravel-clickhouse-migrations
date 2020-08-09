@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Alexeykhr\ClickhouseMigrations\Stubs;
 
@@ -26,7 +28,7 @@ class MigrationStub implements MigrationStubContract
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function generate(string $fileName, string $stubPath, array $parameters = []): string
     {
@@ -76,7 +78,7 @@ class MigrationStub implements MigrationStubContract
     }
 
     /**
-     * Get the class name of a migration name
+     * Get the class name of a migration name.
      *
      * @param  string  $name
      * @return string

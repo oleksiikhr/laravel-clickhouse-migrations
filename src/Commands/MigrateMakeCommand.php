@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Alexeykhr\ClickhouseMigrations\Commands;
 
@@ -8,15 +10,15 @@ use Alexeykhr\ClickhouseMigrations\Factories\FactoryStub;
 use Alexeykhr\ClickhouseMigrations\Concerns\MigrationPath;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Alexeykhr\ClickhouseMigrations\Concerns\MigrationStubHandler;
-use Alexeykhr\ClickhouseMigrations\Exceptions\ClickhouseStubException;
 use Alexeykhr\ClickhouseMigrations\Contracts\MigrationCreatorContract;
+use Alexeykhr\ClickhouseMigrations\Exceptions\ClickhouseStubException;
 
 class MigrateMakeCommand extends Command
 {
     use MigrationPath, MigrationStubHandler;
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected $signature = 'make:clickhouse-migration {name : The name of the migration}
                 {--stub= : Use a specific stub}
@@ -27,12 +29,12 @@ class MigrateMakeCommand extends Command
                 {--realpath : Indicate any provided file paths are pre-resolved absolute paths}';
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected $description = 'Create a new ClickHouse migration file';
 
     /**
-     * Execute the console command
+     * Execute the console command.
      *
      * @param  MigrationCreatorContract  $creator
      * @param  Composer  $composer
@@ -129,7 +131,7 @@ class MigrateMakeCommand extends Command
         $parameters = [];
 
         foreach ($optionParameters as $optionParameter) {
-            [$key, $value] = explode(":", $optionParameter);
+            [$key, $value] = explode(':', $optionParameter);
 
             $parameters[$key] = $value;
         }

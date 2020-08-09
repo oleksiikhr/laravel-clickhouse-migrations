@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Alexeykhr\ClickhouseMigrations\Concerns;
 
@@ -32,6 +34,7 @@ trait MigrationOutput
 
         if (! $confirm) {
             $this->comment('Command Canceled!');
+
             return false;
         }
 
@@ -45,7 +48,7 @@ trait MigrationOutput
     protected function outputWriteMigrations(Generator $migrations): void
     {
         $this->output->newLine();
-        $this->output->writeln("<info>   Migrations for execution:</info>");
+        $this->output->writeln('<info>   Migrations for execution:</info>');
 
         $totalSteps = $this->getStep();
         $step = 0;

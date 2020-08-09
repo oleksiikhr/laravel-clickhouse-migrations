@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Alexeykhr\ClickhouseMigrations\Migrations;
 
@@ -45,7 +47,8 @@ class Migrator
         $migrations = $this->getMigrationsUp();
 
         if (! $migrations->valid()) {
-            $this->log("<info>Migrations are empty.</info>");
+            $this->log('<info>Migrations are empty.</info>');
+
             return;
         }
 
@@ -90,7 +93,8 @@ class Migrator
         $migrations = $this->getMigrationsDown();
 
         if (! $migrations->valid()) {
-            $this->log("<info>Migrations are empty.</info>");
+            $this->log('<info>Migrations are empty.</info>');
+
             return;
         }
 
@@ -129,7 +133,7 @@ class Migrator
     }
 
     /**
-     * Get the name of the migration
+     * Get the name of the migration.
      *
      * @param  string  $path
      * @return string
@@ -239,7 +243,7 @@ class Migrator
     }
 
     /**
-     * Resolve a migration instance from a file
+     * Resolve a migration instance from a file.
      *
      * @param  string  $path
      * @return ClickhouseMigrationContract

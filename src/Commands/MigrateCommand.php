@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Alexeykhr\ClickhouseMigrations\Commands;
 
@@ -14,7 +16,7 @@ class MigrateCommand extends Command
     use ConfirmableTrait, MigrationPath, MigrationStep, MigrationOutput;
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected $signature = 'clickhouse-migrate
                 {--force : Force the operation to run when in production}
@@ -24,12 +26,12 @@ class MigrateCommand extends Command
                 {--step= : Number of migrations to rollback}';
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected $description = 'Run the ClickHouse database migrations';
 
     /**
-     * Execute the console command
+     * Execute the console command.
      *
      * @param  Migrator  $migrator
      * @return void

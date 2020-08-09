@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Alexeykhr\ClickhouseMigrations\Providers;
 
@@ -17,7 +19,7 @@ use Alexeykhr\ClickhouseMigrations\Contracts\MigrationCreatorContract;
 class MigrationProvider extends ServiceProvider
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function register(): void
     {
@@ -46,7 +48,7 @@ class MigrationProvider extends ServiceProvider
     }
 
     /**
-     * Bootstrap services
+     * Bootstrap services.
      *
      * @return void
      */
