@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Alexeykhr\ClickhouseMigrations\Contracts;
 
@@ -7,7 +9,7 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 interface MigrationCreatorContract
 {
     /**
-     * Create a new migration from stub file
+     * Create a new migration from stub file.
      *
      * @param  string  $stubPath
      * @param  string  $fileName

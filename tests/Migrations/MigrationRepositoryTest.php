@@ -1,9 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Alexeykhr\ClickhouseMigrations\Tests\Migrations;
 
-use Alexeykhr\ClickhouseMigrations\Tests\TestCase;
 use Alexeykhr\ClickhouseMigrations\Migrations\MigrationRepository;
+use Alexeykhr\ClickhouseMigrations\Tests\TestCase;
 
 class MigrationRepositoryTest extends TestCase
 {
@@ -104,7 +106,7 @@ class MigrationRepositoryTest extends TestCase
         $repository->add('m_2', 2);
         $repository->add('m_3', 2);
 
-        $migrations = $this->clickhouse()->select("SELECT * FROM t")->rowsAsTree('migration');
+        $migrations = $this->clickhouse()->select('SELECT * FROM t')->rowsAsTree('migration');
 
         self::assertArrayHasKey('m_1', $migrations);
         self::assertEquals(1, $migrations['m_1']['batch']);
@@ -138,7 +140,7 @@ class MigrationRepositoryTest extends TestCase
 
         self::assertFalse($repository->exists());
 
-        $this->clickhouse()->write("CREATE TABLE myTable2 (date DateTime) ENGINE = MergeTree() ORDER BY date");
+        $this->clickhouse()->write('CREATE TABLE myTable2 (date DateTime) ENGINE = MergeTree() ORDER BY date');
 
         self::assertTrue($repository->exists());
     }

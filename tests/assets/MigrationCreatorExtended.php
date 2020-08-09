@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Alexeykhr\ClickhouseMigrations\Tests\assets;
 
@@ -7,7 +9,7 @@ use Alexeykhr\ClickhouseMigrations\Migrations\MigrationCreator;
 class MigrationCreatorExtended extends MigrationCreator
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getDatePrefix(): string
     {

@@ -1,9 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Alexeykhr\ClickhouseMigrations;
 
-use ClickHouseDB\Client;
 use Alexeykhr\ClickhouseMigrations\Contracts\ClickhouseMigrationContract;
+use ClickHouseDB\Client;
 
 abstract class ClickhouseMigration implements ClickhouseMigrationContract
 {

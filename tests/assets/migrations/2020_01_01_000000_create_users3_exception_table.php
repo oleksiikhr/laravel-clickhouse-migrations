@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 use Alexeykhr\ClickhouseMigrations\ClickhouseMigration;
 
@@ -11,7 +13,7 @@ class CreateUsers3ExceptionTable extends ClickhouseMigration
      */
     public function up(): void
     {
-        $this->client->write("CREATE anything");
+        $this->client->write('CREATE anything');
     }
 
     /**
@@ -21,6 +23,6 @@ class CreateUsers3ExceptionTable extends ClickhouseMigration
      */
     public function down(): void
     {
-        $this->client->write("DROP TABLE anything");
+        $this->client->write('DROP TABLE anything');
     }
 }

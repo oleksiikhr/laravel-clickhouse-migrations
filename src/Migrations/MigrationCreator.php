@@ -1,11 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Alexeykhr\ClickhouseMigrations\Migrations;
 
-use Illuminate\Support\Str;
-use Illuminate\Filesystem\Filesystem;
-use Alexeykhr\ClickhouseMigrations\Contracts\MigrationStubContract;
 use Alexeykhr\ClickhouseMigrations\Contracts\MigrationCreatorContract;
+use Alexeykhr\ClickhouseMigrations\Contracts\MigrationStubContract;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Str;
 
 class MigrationCreator implements MigrationCreatorContract
 {
@@ -26,7 +28,7 @@ class MigrationCreator implements MigrationCreatorContract
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function create(string $stubPath, string $fileName, string $migrationPath, array $parameters = []): ?string
     {
@@ -42,7 +44,7 @@ class MigrationCreator implements MigrationCreatorContract
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getStub(): MigrationStubContract
     {
@@ -50,7 +52,7 @@ class MigrationCreator implements MigrationCreatorContract
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function setStub(MigrationStubContract $stub): MigrationCreatorContract
     {
@@ -60,7 +62,7 @@ class MigrationCreator implements MigrationCreatorContract
     }
 
     /**
-     * Get the full path to the migration
+     * Get the full path to the migration.
      *
      * @param  string  $name
      * @param  string  $directory
@@ -72,7 +74,7 @@ class MigrationCreator implements MigrationCreatorContract
     }
 
     /**
-     * Get the date prefix for the migration
+     * Get the date prefix for the migration.
      *
      * @return string
      */
