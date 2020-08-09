@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Alexeykhr\ClickhouseMigrations\Migrations;
 
-use Alexeykhr\ClickhouseMigrations\Contracts\MigrationCreatorContract;
-use Alexeykhr\ClickhouseMigrations\Contracts\MigrationStubContract;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
+use Illuminate\Filesystem\Filesystem;
+use Alexeykhr\ClickhouseMigrations\Contracts\MigrationStubContract;
+use Alexeykhr\ClickhouseMigrations\Contracts\MigrationCreatorContract;
 
 class MigrationCreator implements MigrationCreatorContract
 {

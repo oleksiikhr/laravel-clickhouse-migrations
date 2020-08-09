@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Alexeykhr\ClickhouseMigrations\Tests;
 
+use Orchestra\Testbench\TestCase as BaseCase;
 use Alexeykhr\ClickhouseMigrations\Providers\MigrationProvider;
 use Alexeykhr\ClickhouseMigrations\Tests\Asserts\AssertsClickhouse;
-use Orchestra\Testbench\TestCase as BaseCase;
 
 class TestCase extends BaseCase
 {

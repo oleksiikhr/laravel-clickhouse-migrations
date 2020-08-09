@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Alexeykhr\ClickhouseMigrations\Stubs;
 
+use Illuminate\Support\Str;
+use Illuminate\Filesystem\Filesystem;
 use Alexeykhr\ClickhouseMigrations\Contracts\MigrationStubContract;
 use Alexeykhr\ClickhouseMigrations\Contracts\MigrationStubHandlerContract;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Str;
 
 class MigrationStub implements MigrationStubContract
 {

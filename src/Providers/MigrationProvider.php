@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Alexeykhr\ClickhouseMigrations\Providers;
 
-use Alexeykhr\ClickhouseMigrations\Clickhouse;
-use Alexeykhr\ClickhouseMigrations\Commands\MigrateCommand;
-use Alexeykhr\ClickhouseMigrations\Commands\MigrateMakeCommand;
-use Alexeykhr\ClickhouseMigrations\Commands\MigrateRollbackCommand;
-use Alexeykhr\ClickhouseMigrations\Contracts\MigrationCreatorContract;
-use Alexeykhr\ClickhouseMigrations\Migrations\MigrationCreator;
-use Alexeykhr\ClickhouseMigrations\Migrations\MigrationRepository;
-use Alexeykhr\ClickhouseMigrations\Migrations\Migrator;
-use Alexeykhr\ClickhouseMigrations\Stubs\MigrationStub;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\ServiceProvider;
+use Alexeykhr\ClickhouseMigrations\Clickhouse;
+use Alexeykhr\ClickhouseMigrations\Migrations\Migrator;
+use Alexeykhr\ClickhouseMigrations\Stubs\MigrationStub;
+use Alexeykhr\ClickhouseMigrations\Commands\MigrateCommand;
+use Alexeykhr\ClickhouseMigrations\Commands\MigrateMakeCommand;
+use Alexeykhr\ClickhouseMigrations\Migrations\MigrationCreator;
+use Alexeykhr\ClickhouseMigrations\Migrations\MigrationRepository;
+use Alexeykhr\ClickhouseMigrations\Commands\MigrateRollbackCommand;
+use Alexeykhr\ClickhouseMigrations\Contracts\MigrationCreatorContract;
 
 class MigrationProvider extends ServiceProvider
 {

@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Alexeykhr\ClickhouseMigrations\Commands;
 
+use Illuminate\Console\Command;
+use Illuminate\Support\Composer;
+use Alexeykhr\ClickhouseMigrations\Factories\FactoryStub;
 use Alexeykhr\ClickhouseMigrations\Concerns\MigrationPath;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Alexeykhr\ClickhouseMigrations\Concerns\MigrationStubHandler;
 use Alexeykhr\ClickhouseMigrations\Contracts\MigrationCreatorContract;
 use Alexeykhr\ClickhouseMigrations\Exceptions\ClickhouseStubException;
-use Alexeykhr\ClickhouseMigrations\Factories\FactoryStub;
-use Illuminate\Console\Command;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Illuminate\Support\Composer;
 
 class MigrateMakeCommand extends Command
 {

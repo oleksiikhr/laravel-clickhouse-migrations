@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Alexeykhr\ClickhouseMigrations\Concerns;
 
-use Alexeykhr\ClickhouseMigrations\Migrations\Migrator;
 use Generator;
+use Alexeykhr\ClickhouseMigrations\Migrations\Migrator;
 
 trait MigrationOutput
 {
