@@ -1,7 +1,13 @@
 {
     "name": "alexeykhr/laravel-clickhouse-migrations",
     "description": "Clickhouse migrations for Laravel",
-    "keywords": ["clickhouse", "migrations", "laravel", "package", "library"],
+    "keywords": [
+        "clickhouse",
+        "migrations",
+        "laravel",
+        "package",
+        "library"
+    ],
     "license": "MIT",
     "homepage": "https://github.com/alexeykhr/laravel-clickhouse-migrations",
     "authors": [
