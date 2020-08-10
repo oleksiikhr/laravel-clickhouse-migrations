@@ -16,7 +16,7 @@ trait MigrationStubHandler
     {
         return array_merge(
             $this->getDefaultHandlers(),
-            $this->getConfigHandlers(),
+            $this->getConfigGlobalHandlers(),
             $this->getOptionHandlers()
         );
     }
@@ -48,9 +48,9 @@ trait MigrationStubHandler
     /**
      * @return MigrationStubHandlerContract[]
      */
-    protected function getConfigHandlers(): array
+    protected function getConfigGlobalHandlers(): array
     {
-        $classes = config('clickhouse.handlers', []);
+        $classes = config('clickhouse.handlers.global', []);
 
         return $this->makeHandlers($classes);
     }
