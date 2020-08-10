@@ -57,12 +57,14 @@ return [
     | ClickHouse Handlers
     |--------------------------------------------------------------------------
     |
-    | In addition to custom stubs, you can also add your own stub file handlers,
-    | and pass the command through artisan.
+    | Global handlers that apply to every stub created. You can also pass the
+    | handler through the artisan command.
     |
     */
 
     'handlers' => [
-        //'App\Clickhouse\Handlers\MyHandler',
+        'global' => [
+            //'App\Clickhouse\Handlers\MyHandler',
+        ],
     ],
 ];
