@@ -39,7 +39,7 @@ trait InteractsWithClickhouse
                 'timeout' => 1,
                 'connectTimeOut' => 2,
             ],
-            ]))->getClient();
+        ]))->getClient();
     }
 
     /**
